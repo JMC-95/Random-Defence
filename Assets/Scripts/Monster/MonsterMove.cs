@@ -10,13 +10,16 @@ public class MonsterMove : MonoBehaviour
     public float Speed;
     public int Soul;
 
-    private int wayPointIndex = 0;
+    private int wayPointIndex;
 
     public void Init(int speed, int soul)
     {
         Speed = speed;
         Soul = soul;
 
+        transform.localScale = new Vector3(-2, 2, -1);
+
+        wayPointIndex = 0;
         wayPoints = new Vector3[4];
 
         wayPoints.SetValue(new Vector3(0, -7.0f, transform.position.z), 0);
@@ -27,12 +30,11 @@ public class MonsterMove : MonoBehaviour
 
     void Update()
     {
-        curPosition = transform.position;
-
         if (wayPointIndex < wayPoints.Length)
         {
             float step = Speed * Time.deltaTime;
 
+            curPosition = transform.position;
             transform.position = Vector3.MoveTowards(curPosition, wayPoints[wayPointIndex], step);
 
             if (Vector3.Distance(wayPoints[wayPointIndex], curPosition) == 0.0f)

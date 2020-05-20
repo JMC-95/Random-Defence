@@ -8,11 +8,11 @@ namespace Type
         public static int Knight = 1;
         public static int Max = Knight + 1;
 
-        public static string ToString(int monsterType)
+        public static string ToString(int characterType)
         {
-            if (monsterType == 0)
+            if (characterType == 0)
                 return "ch001";
-            if (monsterType == 1)
+            if (characterType == 1)
                 return "ch005";
 
             return null;

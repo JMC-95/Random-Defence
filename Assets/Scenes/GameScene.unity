@@ -4253,6 +4253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3365a51ed70fc8b45a106b2cd55632fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterPrefabs: []
+  bagicPath: Prefabs/Player/
 --- !u!1 &1261633485
 GameObject:
   m_ObjectHideFlags: 0

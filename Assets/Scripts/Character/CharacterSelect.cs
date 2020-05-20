@@ -7,6 +7,8 @@ public class CharacterSelect : MonoBehaviour
     GameObject target;
     CharacterMove character;
 
+    bool isSelect = false;
+
     void Update()
     {
         int layerMask = 1 << LayerMask.NameToLayer("Player");
@@ -15,18 +17,20 @@ public class CharacterSelect : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (hit.collider != null && hit.collider.tag == "Player")
+            if (hit.collider != null && hit.collider.tag == "Player" && !isSelect)
             {
                 target = hit.collider.gameObject;
                 character = target.GetComponent<CharacterMove>();
 
                 character.Select();
+                isSelect = true;
             }
             else
             {
-                if (target != null)
+                if (target != null && isSelect)
                 {
                     character.Move();
+                    isSelect = false;
                 }
             }
         }
