@@ -5,13 +5,18 @@ using UnityEngine;
 public class MonsterMove : MonoBehaviour
 {
     public Vector3[] wayPoints;
-    private Vector3 currPosition;
+    private Vector3 curPosition;
+
+    public float Speed;
+    public int Soul;
 
     private int wayPointIndex = 0;
-    public float speed;
 
-    void Start()
+    public void Init(int speed, int soul)
     {
+        Speed = speed;
+        Soul = soul;
+
         wayPoints = new Vector3[4];
 
         wayPoints.SetValue(new Vector3(0, -7.0f, transform.position.z), 0);
@@ -22,15 +27,15 @@ public class MonsterMove : MonoBehaviour
 
     void Update()
     {
-        currPosition = transform.position;
+        curPosition = transform.position;
 
         if (wayPointIndex < wayPoints.Length)
         {
-            float step = speed * Time.deltaTime;
+            float step = Speed * Time.deltaTime;
 
-            transform.position = Vector3.MoveTowards(currPosition, wayPoints[wayPointIndex], step);
+            transform.position = Vector3.MoveTowards(curPosition, wayPoints[wayPointIndex], step);
 
-            if (Vector3.Distance(wayPoints[wayPointIndex], currPosition) == 0.0f)
+            if (Vector3.Distance(wayPoints[wayPointIndex], curPosition) == 0.0f)
             {
                 wayPointIndex++;
 
@@ -42,6 +47,5 @@ public class MonsterMove : MonoBehaviour
                 }
             }
         }
-
     }
 }

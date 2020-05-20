@@ -6,6 +6,8 @@ public class MonsterSpawner : MonoBehaviour
 {
     private GameManager gameManager;
 
+    public GameObject portal;
+
     [Header("Monster Create Info")]
     private float createTime = 0.5f;    //몬스터 생성 시간
 
@@ -29,6 +31,8 @@ public class MonsterSpawner : MonoBehaviour
 
     void Start()
     {
+        portal = transform.GetChild(0).gameObject;
+
         curMonster = 0;
         maxMonster = 60;
         genCount = 0;
@@ -50,7 +54,7 @@ public class MonsterSpawner : MonoBehaviour
 
     public IEnumerator CreateMonster()
     {
-        while (!GameManager.instance.isGameOver && !GameManager.instance.isWaveEnd)
+        while (!gameManager.isGameOver && !gameManager.isWaveEnd)
         {
             if (genCount < genCountLimit)
             {
@@ -59,17 +63,21 @@ public class MonsterSpawner : MonoBehaviour
                 for (int i = 0; i < curWaveMonsterList.Count; ++i)
                 {
                     var monster = Getmonster(curWaveMonsterList[i].MonsterName);
+                    var monsterDamage = monster.GetComponent<MonsterDamage>();
 
-                    SetToUnit(monster, curWaveMonsterList[i].Gold);
+                    monsterDamage.isDie = false;
+                    monsterDamage.SetHpBar(curWaveMonsterList[i].Hp);
+
+                    SetToUnit(monster, curWaveMonsterList[i].Speed, curWaveMonsterList[i].Soul);
                     curMonster += 1;
                     genCount += 1;
                 }
             }
             else
             {
-                if (GameManager.instance.curWave == 5)
+                if (gameManager.curWave == 6)
                 {
-                    GameManager.instance.stageEnd = true;
+                    gameManager.stageEnd = true;
                 }
 
                 yield return null;
@@ -77,11 +85,12 @@ public class MonsterSpawner : MonoBehaviour
         }
     }
 
-    public void SetToUnit(GameObject unitObj, int gold)
+    public void SetToUnit(GameObject unitObj, int speed, int soul)
     {
         unitObj.transform.position = transform.position;
         unitObj.transform.rotation = transform.rotation;
         unitObj.SetActive(true);
+        unitObj.GetComponent<MonsterMove>().Init(speed, soul);
     }
 
     public GameObject Getmonster(string monsterName)
@@ -101,7 +110,7 @@ public class MonsterSpawner : MonoBehaviour
 
     public void CreatePooling()
     {
-        GameObject objectPools = new GameObject("ObjectPools");
+        GameObject objectPools = new GameObject("MonsterPooling");
 
         monsterPools = new Dictionary<string, List<GameObject>>();
         gameManager.LoadMonsterPrefabs();
