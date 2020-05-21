@@ -44,9 +44,6 @@ public class GameManager : MonoBehaviour
     public GameObject[] monsterPrefabs;
     public string bagicPath = "Prefabs/Monster/";
 
-    string[] MonsterName = new string[11] { "Goblin", "GoblinWarrior", "GoblinMage", "Golem",
-        "WoodGolem", "IronGolem", "IceGolem", "Kerberos", "Minotauros", "Troll", "Dragon" };
-
     //first key : Stage, second key : Wave
     public Dictionary<int, Dictionary<int, List<GenInfomation>>> GenInfoMation;
 
@@ -105,11 +102,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Type.Monster.Max; ++i)
         {
             monsterPrefabs[i] = Resources.Load(bagicPath + Type.Monster.ToString(i)) as GameObject;
-        }
-
-        for (int i = 0; i < Type.Monster.Max; ++i)
-        {
-            monsterPrefabs[i].name = MonsterName[i];
         }
     }
 

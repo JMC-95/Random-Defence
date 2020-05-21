@@ -11,49 +11,55 @@ public class CharacterAttack : MonoBehaviour
     private MonsterDamage monsterDamage;
 
     private float fillAmount;
-    private float fTime = 0;
-    private float delay = 0;
-    public float atkSpeed;
+    public float fTime;
+    private float atkSpeed;
+    private float delay;
 
     void Start()
     {
+        var characterInfomation = GetComponentInParent<CharacterInfomation>();
+
         anim = GetComponentInParent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        atkSpeed = 1.0f;
+        fTime = 0.0f;
+        atkSpeed = characterInfomation.fAspeed;
+        delay = 1 / atkSpeed;
     }
 
     void Update()
     {
-        fTime += Time.deltaTime;
-
         if (collMonsters.Count > 0)
         {
             GameObject target = collMonsters[0];
             monsterDamage = target.GetComponent<MonsterDamage>();
 
+            fTime += Time.deltaTime;
+
             if (transform.parent.tag == "Player")
             {
-                delay = 1 / atkSpeed;
-
-                if (target != null && fTime > delay)
-                {
-                    //몬스터의 위치에 따라서 캐릭터의 공격 방향이 결정된다.
-                    if (target.transform.position.x < transform.parent.position.x)
-                        transform.parent.localScale = new Vector3(2, 2, -1);
-                    else
-                        transform.parent.localScale = new Vector3(-2, 2, -1);
-
-                    fTime = 0.0f;
-                    anim.SetBool("Attack", true);
-                }
-
                 for (int i = 0; i < collMonsters.Count; ++i)
                 {
                     if (!collMonsters[i].activeInHierarchy)
                     {
                         collMonsters.Remove(collMonsters[i]);
                     }
+                }
+
+                if (target != null && fTime > delay)
+                {
+                    fTime = 0.0f;
+                    anim.SetBool("Attack", true);
+
+                    //몬스터의 위치에 따라서 캐릭터의 공격 방향이 결정된다.
+                    if (target.transform.position.x < transform.parent.position.x)
+                        transform.parent.localScale = new Vector3(2, 2, -1);
+                    else
+                        transform.parent.localScale = new Vector3(-2, 2, -1);
+                }
+                else
+                {
+                    anim.SetBool("Attack", false);
                 }
             }
         }

@@ -53,10 +53,6 @@ public class HeroData
     public float fAspeed { get; set; }
     public int nSkillPow { get; set; }
     public string sSkilldes { get; set; }
-
-    public void GetTable()
-    {
-    }
 }
 
 public class DataController : MonoBehaviour

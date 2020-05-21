@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CharacterInfomation : MonoBehaviour
 {
-    DataController d;
-    public HeroData Knight;
+    private HeroData hero;
+
     public int nID;
     public string sProperty;
     public int nRating;
@@ -17,13 +17,14 @@ public class CharacterInfomation : MonoBehaviour
 
     void Start()
     {
-        var hTb = DataController.instance.heroData[0];
+        hero = DataController.instance.heroData[nID];
 
-        foreach(var h in hTb.GetTable())
-
-        d = DataController.instance;
-        Knight = DataController.instance.heroData[nID];
-        sProperty = Knight.sProperty;
-        sName = Knight.sName;
+        sProperty = hero.sProperty;
+        nRating = hero.nRating;
+        sName = hero.sProperty;
+        nPower = hero.nPower;
+        fAspeed = hero.fAspeed;
+        nSkillPow = hero.nSkillPow;
+        sSkilldes = hero.sSkilldes;
     }
 }
