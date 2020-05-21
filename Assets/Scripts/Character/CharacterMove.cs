@@ -9,13 +9,15 @@ public class CharacterMove : MonoBehaviour
     private Animator anim;
     private Vector2 targetPos;          //캐릭터가 이동할 위치(Position)
 
-    private float speed = 4.0f;
+    private float speed;
 
     void Start()
     {
         characterAtk = GetComponentInChildren<CharacterAttack>();
         anim = GetComponent<Animator>();
         targetPos = transform.position;
+
+        speed = 4.0f;
     }
 
     void Update()

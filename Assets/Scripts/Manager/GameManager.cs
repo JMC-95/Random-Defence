@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
     {
         monsterType = 0;
         waveCount = 0;
-        soul = 0;
+        soul = 500;
         curStage = 1;
         curWave = 0;
         stageMax = 3;

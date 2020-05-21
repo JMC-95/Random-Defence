@@ -13,12 +13,14 @@ public class CharacterAttack : MonoBehaviour
     private float fillAmount;
     private float fTime = 0;
     private float delay = 0;
-    public float atkSpeed = 1f;
+    public float atkSpeed;
 
     void Start()
     {
         anim = GetComponentInParent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        atkSpeed = 1.0f;
     }
 
     void Update()

@@ -2,22 +2,22 @@
 
 namespace Type
 {
-    class Character
-    {
-        public static int Farmer = 0;
-        public static int Knight = 1;
-        public static int Max = Knight + 1;
+    //class Character
+    //{
+    //    public static int Farmer = 0;
+    //    public static int Knight = 1;
+    //    public static int Max = Knight + 1;
 
-        public static string ToString(int characterType)
-        {
-            if (characterType == 0)
-                return "ch001";
-            if (characterType == 1)
-                return "ch005";
+    //    public static string ToString(int characterType)
+    //    {
+    //        if (characterType == 0)
+    //            return "1";
+    //        if (characterType == 1)
+    //            return "2";
 
-            return null;
-        }
-    }
+    //        return null;
+    //    }
+    //}
 
     class Monster
     {
