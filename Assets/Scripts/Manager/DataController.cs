@@ -55,11 +55,23 @@ public class HeroData
     public string sSkilldes { get; set; }
 }
 
+[Serializable]
+public class CombineData
+{
+    public int nID { get; set; }
+    public string sName { get; set; }
+    public int nMaterial1 { get; set; }
+    public int nMaterial2 { get; set; }
+    public int nMaterial3 { get; set; }
+    public int nMaterial4 { get; set; }
+}
+
 public class DataController : MonoBehaviour
 {
     public static DataController instance = null;
 
     public HeroData[] heroData;
+    public CombineData[] combineData;
 
     void Awake()
     {
@@ -76,6 +88,7 @@ public class DataController : MonoBehaviour
     void Start()
     {
         LoadHeroData();
+        LoadCombineData();
     }
 
     public void LoadHeroData()
@@ -84,5 +97,13 @@ public class DataController : MonoBehaviour
         string jsonData = File.ReadAllText(path);
 
         heroData = JsonConvert.DeserializeObject<HeroData[]>(jsonData);
+    }
+
+    public void LoadCombineData()
+    {
+        string path = Application.dataPath + "/Scripts/JsonData/CombineData.json";
+        string jsonData = File.ReadAllText(path);
+
+        combineData = JsonConvert.DeserializeObject<CombineData[]>(jsonData);
     }
 }

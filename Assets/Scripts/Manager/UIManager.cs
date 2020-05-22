@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public Text timer;
 
     public Image combineImage;
+    public Image test;
 
     private float time;
 
@@ -101,9 +102,9 @@ public class UIManager : MonoBehaviour
 
     public void ClickRating2()
     {
-        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 23);
-        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 18);
-        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 18);
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, 23);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-165, 18);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-120, 18);
         rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
         rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
         rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
@@ -111,9 +112,9 @@ public class UIManager : MonoBehaviour
 
     public void ClickRating3()
     {
-        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 18);
-        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 23);
-        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 18);
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, 18);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-165, 23);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-120, 18);
         rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
         rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
         rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
@@ -121,11 +122,19 @@ public class UIManager : MonoBehaviour
 
     public void ClickRating4()
     {
-        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 18);
-        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 18);
-        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 23);
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, 18);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-165, 18);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-120, 23);
         rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
         rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
         rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
+    }
+
+    public void ImageChange()
+    {
+        var name = DataController.instance.heroData[DataController.instance.combineData[2].nMaterial1 -1].sName;
+        //var num = DataController.instance.combineData[name].sName
+        Debug.Log(name);
+        //test.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + num.sName);
     }
 }
