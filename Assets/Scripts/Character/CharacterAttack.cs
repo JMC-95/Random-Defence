@@ -11,9 +11,11 @@ public class CharacterAttack : MonoBehaviour
     private MonsterDamage monsterDamage;
 
     private float fillAmount;
-    public float fTime;
     private float atkSpeed;
     private float delay;
+    public float fTime;
+
+    public bool isCollision;
 
     void Start()
     {
@@ -22,9 +24,9 @@ public class CharacterAttack : MonoBehaviour
         anim = GetComponentInParent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        fTime = 0.0f;
         atkSpeed = characterInfomation.fAspeed;
         delay = 1 / atkSpeed;
+        fTime = 0.0f;
     }
 
     void Update()
@@ -46,9 +48,8 @@ public class CharacterAttack : MonoBehaviour
                     }
                 }
 
-                if (target != null && fTime > delay)
+                if (target != null && fTime > delay || !isCollision)
                 {
-                    fTime = 0.0f;
                     anim.SetBool("Attack", true);
 
                     //몬스터의 위치에 따라서 캐릭터의 공격 방향이 결정된다.
@@ -66,6 +67,7 @@ public class CharacterAttack : MonoBehaviour
         else
         {
             anim.SetBool("Attack", false);
+            isCollision = false;
         }
     }
 

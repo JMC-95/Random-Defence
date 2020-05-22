@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         var firstWave = new Dictionary<int, List<GenInfomation>>();
         //1 Wave - Monster
         var first = new List<GenInfomation>();
-        first.Add(new GenInfomation(Type.Monster.Goblin, 80, 3, 30, 30));
+        first.Add(new GenInfomation(Type.Monster.Goblin, 80, 3, 30, 20));
         firstWave.Add(1, first);
         //2 Wave - Monster
         var second = new List<GenInfomation>();

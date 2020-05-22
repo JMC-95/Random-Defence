@@ -9,6 +9,11 @@ public class UIManager : MonoBehaviour
 
     private MonsterSpawner monsterSpawnerScript;
 
+    public Button combine;
+    public Button rating2;
+    public Button rating3;
+    public Button rating4;
+    public Button exit;
     public Button skip;
 
     public Text soulCount;
@@ -16,6 +21,8 @@ public class UIManager : MonoBehaviour
     public Text waveCount;
     public Text genCount;
     public Text timer;
+
+    public Image combineImage;
 
     private float time;
 
@@ -80,5 +87,45 @@ public class UIManager : MonoBehaviour
         gameManager.StartWave();
 
         if (gameManager.stageEnd) gameManager.StartStage();
+    }
+
+    public void ClickCombine()
+    {
+        combineImage.gameObject.SetActive(true);
+    }
+
+    public void ExitCombine()
+    {
+        combineImage.gameObject.SetActive(false);
+    }
+
+    public void ClickRating2()
+    {
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 23);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 18);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 18);
+        rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
+        rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+        rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+    }
+
+    public void ClickRating3()
+    {
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 18);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 23);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 18);
+        rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+        rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
+        rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+    }
+
+    public void ClickRating4()
+    {
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-195, 18);
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 18);
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-105, 23);
+        rating2.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+        rating3.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 20);
+        rating4.GetComponent<RectTransform>().sizeDelta = new Vector2(45, 25);
     }
 }

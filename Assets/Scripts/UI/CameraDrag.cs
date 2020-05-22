@@ -23,7 +23,7 @@ public class CameraDrag : MonoBehaviour
 
     void Move()
     {
-        if (Camera.main.orthographicSize <= 6)
+        if (Camera.main.orthographicSize <= 5)
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -65,7 +65,7 @@ public class CameraDrag : MonoBehaviour
 
             //Camera 확대 및 축소 제한
             if (Camera.main.orthographicSize < 3) Camera.main.orthographicSize = 3;
-            else if (Camera.main.orthographicSize > 8) Camera.main.orthographicSize = 8;
+            else if (Camera.main.orthographicSize > 7) Camera.main.orthographicSize = 7;
         }
     }
 }

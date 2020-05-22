@@ -21,7 +21,7 @@ public class CharacterInfomation : MonoBehaviour
 
         sProperty = hero.sProperty;
         nRating = hero.nRating;
-        sName = hero.sProperty;
+        sName = hero.sName;
         nPower = hero.nPower;
         fAspeed = hero.fAspeed;
         nSkillPow = hero.nSkillPow;

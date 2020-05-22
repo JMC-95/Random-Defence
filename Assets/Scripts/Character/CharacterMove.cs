@@ -52,4 +52,12 @@ public class CharacterMove : MonoBehaviour
     {
         characterAtk.MonsterHit();
     }
+
+    public void Attack()
+    {
+        var characterAttack = GetComponentInChildren<CharacterAttack>();
+
+        characterAttack.isCollision = true;
+        characterAttack.fTime = 0.0f;
+    }
 }
