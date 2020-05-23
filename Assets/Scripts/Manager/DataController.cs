@@ -39,7 +39,7 @@ public enum eHero
     Blackguards,
     Bishop,
     DragonKnight,
-    End
+    Max
 }
 
 [Serializable]
@@ -72,6 +72,8 @@ public class DataController : MonoBehaviour
 
     public HeroData[] heroData;
     public CombineData[] combineData;
+
+    public eHero hero;
 
     void Awake()
     {

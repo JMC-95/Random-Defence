@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CharacterSelect : MonoBehaviour
 {
-    GameObject target;
-    CharacterMove character;
+    public GameObject target;
+    public CharacterMove character;
 
-    int layerMask;
-    RaycastHit2D hit;
+    private int layerMask;
+    private RaycastHit2D hit;
 
-    bool isSelect = false;
+    public bool isSelect = false;
 
     void Start()
     {
@@ -19,24 +20,29 @@ public class CharacterSelect : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !UIManager.instance.isCombine)
         {
-            hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 0f, layerMask);
-
-            if (hit.collider != null && hit.collider.tag == "Player" && !isSelect)
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                target = hit.collider.gameObject;
-                character = target.GetComponent<CharacterMove>();
+                hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 0f, layerMask);
 
-                character.Select();
-                isSelect = true;
-            }
-            else
-            {
-                if (target != null && isSelect)
+                if (hit.collider != null && hit.collider.tag == "Player" && !isSelect)
                 {
-                    character.Move();
-                    isSelect = false;
+                    target = hit.collider.gameObject;
+                    character = target.GetComponent<CharacterMove>();
+
+                    UIManager.instance.UpdateInfo();
+                    character.Select();
+                    isSelect = true;
+                }
+                else
+                {
+                    if (target != null && isSelect)
+                    {
+                        UIManager.instance.UpdateInfoExit();
+                        character.Move();
+                        isSelect = false;
+                    }
                 }
             }
         }

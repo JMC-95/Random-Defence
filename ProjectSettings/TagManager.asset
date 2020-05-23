@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Range
   - Monster
+  - Ground
+  - Button
   layers:
   - Default
   - TransparentFX

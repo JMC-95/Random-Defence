@@ -8,6 +8,7 @@ public class CharacterAttack : MonoBehaviour
 
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+    private CharacterInfomation playerInfo;
     private MonsterDamage monsterDamage;
 
     private float fillAmount;
@@ -19,12 +20,11 @@ public class CharacterAttack : MonoBehaviour
 
     void Start()
     {
-        var characterInfomation = GetComponentInParent<CharacterInfomation>();
-
         anim = GetComponentInParent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        playerInfo = GetComponentInParent<CharacterInfomation>();
 
-        atkSpeed = characterInfomation.fAspeed;
+        atkSpeed = playerInfo.fAspeed;
         delay = 1 / atkSpeed;
         fTime = 0.0f;
     }
@@ -84,7 +84,7 @@ public class CharacterAttack : MonoBehaviour
     public void MonsterHit()
     {
         //몬스터의 체력이 줄어든다.
-        monsterDamage.curHp -= 20;
+        monsterDamage.curHp -= playerInfo.nPower;
         monsterDamage.hpBarImage.fillAmount = monsterDamage.curHp / (float)monsterDamage.initHp;
 
         //몬스터의 체력 비율에 따라 색상이 바뀐다.

@@ -14,6 +14,8 @@ public class CharacterInfomation : MonoBehaviour
     public float fAspeed;
     public int nSkillPow;
     public string sSkilldes;
+    public int nLevel;
+    public int nSell;
 
     void Start()
     {
@@ -26,5 +28,6 @@ public class CharacterInfomation : MonoBehaviour
         fAspeed = hero.fAspeed;
         nSkillPow = hero.nSkillPow;
         sSkilldes = hero.sSkilldes;
+        nLevel = 1;
     }
 }

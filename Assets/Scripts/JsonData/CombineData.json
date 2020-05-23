@@ -34,7 +34,7 @@
   {
     "nID": 13,
     "sName": "성기사",
-    "nMaterial1": 4,
+    "nMaterial1": 5,
     "nMaterial2": 1,
     "nMaterial3": 0,
     "nMaterial4": 0
@@ -42,8 +42,8 @@
   {
     "nID": 14,
     "sName": "바드",
-    "nMaterial1": 6,
-    "nMaterial2": 4,
+    "nMaterial1": 4,
+    "nMaterial2": 6,
     "nMaterial3": 0,
     "nMaterial4": 0
   },
@@ -90,9 +90,9 @@
   {
     "nID": 20,
     "sName": "슬레이어",
-    "nMaterial1": 5,
-    "nMaterial2": 11,
-    "nMaterial3": 14,
+    "nMaterial1": 11,
+    "nMaterial2": 14,
+    "nMaterial3": 5,
     "nMaterial4": 0
   },
   {
@@ -130,7 +130,7 @@
   {
     "nID": 25,
     "sName": "블랙가드",
-    "nMaterial1": 18,
+    "nMaterial1": 19,
     "nMaterial2": 17,
     "nMaterial3": 11,
     "nMaterial4": 5
@@ -138,8 +138,8 @@
   {
     "nID": 26,
     "sName": "비숍",
-    "nMaterial1": 14,
-    "nMaterial2": 18,
+    "nMaterial1": 18,
+    "nMaterial2": 19,
     "nMaterial3": 9,
     "nMaterial4": 6
   },

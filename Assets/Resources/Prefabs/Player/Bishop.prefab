@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 7744620575689012170}
   - component: {fileID: 5354761967193433038}
   m_Layer: 9
-  m_Name: 26
+  m_Name: Bishop
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -318,6 +318,8 @@ MonoBehaviour:
   fAspeed: 0
   nSkillPow: 0
   sSkilldes: 
+  nLevel: 0
+  nSell: 1000
 --- !u!1 &111404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,7 +1588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b6f940a490dce4db4ce3a86b062d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkSpeed: 1
+  fTime: 0
+  isCollision: 0
 --- !u!1 &5678394695989147061
 GameObject:
   m_ObjectHideFlags: 0

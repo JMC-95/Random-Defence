@@ -976,7 +976,7 @@ GameObject:
   - component: {fileID: 2438188595277159646}
   - component: {fileID: 7787304995668415805}
   m_Layer: 9
-  m_Name: 12
+  m_Name: Assassin
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1088,6 +1088,8 @@ MonoBehaviour:
   fAspeed: 0
   nSkillPow: 0
   sSkilldes: 
+  nLevel: 0
+  nSell: 200
 --- !u!1 &187504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,7 +1588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b6f940a490dce4db4ce3a86b062d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkSpeed: 1
+  fTime: 0
+  isCollision: 0
 --- !u!1 &5176879010722083555
 GameObject:
   m_ObjectHideFlags: 0
