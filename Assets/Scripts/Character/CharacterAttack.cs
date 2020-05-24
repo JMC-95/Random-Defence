@@ -16,8 +16,6 @@ public class CharacterAttack : MonoBehaviour
     private float delay;
     public float fTime;
 
-    public bool isCollision;
-
     void Start()
     {
         anim = GetComponentInParent<Animator>();
@@ -31,24 +29,16 @@ public class CharacterAttack : MonoBehaviour
 
     void Update()
     {
+        fTime += Time.deltaTime;
+
         if (collMonsters.Count > 0)
         {
             GameObject target = collMonsters[0];
             monsterDamage = target.GetComponent<MonsterDamage>();
 
-            fTime += Time.deltaTime;
-
             if (transform.parent.tag == "Player")
             {
-                for (int i = 0; i < collMonsters.Count; ++i)
-                {
-                    if (!collMonsters[i].activeInHierarchy)
-                    {
-                        collMonsters.Remove(collMonsters[i]);
-                    }
-                }
-
-                if (target != null && fTime > delay || !isCollision)
+                if (target != null && fTime > delay)
                 {
                     anim.SetBool("Attack", true);
 
@@ -62,12 +52,19 @@ public class CharacterAttack : MonoBehaviour
                 {
                     anim.SetBool("Attack", false);
                 }
+
+                for (int i = 0; i < collMonsters.Count; ++i)
+                {
+                    if (!collMonsters[i].activeInHierarchy)
+                    {
+                        collMonsters.Remove(collMonsters[i]);
+                    }
+                }
             }
         }
         else
         {
             anim.SetBool("Attack", false);
-            isCollision = false;
         }
     }
 

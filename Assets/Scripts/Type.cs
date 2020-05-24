@@ -2,22 +2,70 @@
 
 namespace Type
 {
-    //class Character
-    //{
-    //    public static int Farmer = 0;
-    //    public static int Knight = 1;
-    //    public static int Max = Knight + 1;
+    class Character
+    {
+        public static int Max = 27;
 
-    //    public static string ToString(int characterType)
-    //    {
-    //        if (characterType == 0)
-    //            return "1";
-    //        if (characterType == 1)
-    //            return "2";
+        public static string ToString(int characterType)
+        {
+            if (characterType == 0)
+                return "Warrior";
+            if (characterType == 1)
+                return "Archer";
+            if (characterType == 2)
+                return "Wizard";
+            if (characterType == 3)
+                return "Fighter";
+            if (characterType == 4)
+                return "Lancer";
+            if (characterType == 5)
+                return "Monk";
+            if (characterType == 6)
+                return "Thief";
+            if (characterType == 7)
+                return "Mechanic";
+            if (characterType == 8)
+                return "Priest";
+            if (characterType == 9)
+                return "Engineer";
+            if (characterType == 10)
+                return "Samurai";
+            if (characterType == 11)
+                return "Assassin";
+            if (characterType == 12)
+                return "Paladin";
+            if (characterType == 13)
+                return "Bard";
+            if (characterType == 14)
+                return "Sorcerer";
+            if (characterType == 15)
+                return "Sniper";
+            if (characterType == 16)
+                return "Avenger";
+            if (characterType == 17)
+                return "Valkyrie";
+            if (characterType == 18)
+                return "Grappler";
+            if (characterType == 19)
+                return "Slayer";
+            if (characterType == 20)
+                return "Hunter";
+            if (characterType == 21)
+                return "Berserker";
+            if (characterType == 22)
+                return "RuneKnight";
+            if (characterType == 23)
+                return "Crusaders";
+            if (characterType == 24)
+                return "Blackguards";
+            if (characterType == 25)
+                return "Bishop";
+            if (characterType == 26)
+                return "DragonKnight";
 
-    //        return null;
-    //    }
-    //}
+            return null;
+        }
+    }
 
     class Monster
     {

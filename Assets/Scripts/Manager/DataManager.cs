@@ -16,7 +16,7 @@ public enum eHero
     Lancer,
     Monk,
     Thief,
-    Gunner,
+    Mechanic,
     //2성
     Priest = 9,
     Engineer,
@@ -66,9 +66,9 @@ public class CombineData
     public int nMaterial4 { get; set; }
 }
 
-public class DataController : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
-    public static DataController instance = null;
+    public static DataManager instance = null;
 
     public HeroData[] heroData;
     public CombineData[] combineData;

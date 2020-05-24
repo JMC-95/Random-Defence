@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dbb4ee0bae05ca4e85266a6625dbcbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nID: 7
+  nID: 9
   sProperty: 
   nRating: 0
   sName: 
@@ -1188,7 +1188,7 @@ MonoBehaviour:
   nSkillPow: 0
   sSkilldes: 
   nLevel: 0
-  nSell: 100
+  nSell: 200
 --- !u!1 &143242
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1589,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fTime: 0
-  isCollision: 0
 --- !u!1 &1787219663
 GameObject:
   m_ObjectHideFlags: 0

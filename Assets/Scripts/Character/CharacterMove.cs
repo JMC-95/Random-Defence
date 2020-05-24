@@ -56,8 +56,6 @@ public class CharacterMove : MonoBehaviour
     public void Attack()
     {
         var characterAttack = GetComponentInChildren<CharacterAttack>();
-
-        characterAttack.isCollision = true;
         characterAttack.fTime = 0.0f;
     }
 }

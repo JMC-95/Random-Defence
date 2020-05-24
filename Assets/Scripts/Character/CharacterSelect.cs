@@ -20,7 +20,7 @@ public class CharacterSelect : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !UIManager.instance.isCombine)
+        if (Input.GetMouseButtonDown(0) && !UIManager.instance.isCombineTable)
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {

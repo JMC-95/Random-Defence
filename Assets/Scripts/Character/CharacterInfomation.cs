@@ -19,7 +19,7 @@ public class CharacterInfomation : MonoBehaviour
 
     void Start()
     {
-        hero = DataController.instance.heroData[nID];
+        hero = DataManager.instance.heroData[nID];
 
         sProperty = hero.sProperty;
         nRating = hero.nRating;
