@@ -10,26 +10,30 @@ using System.Collections;
 
 public class CFX_ShurikenThreadFix : MonoBehaviour
 {
-	private ParticleSystem[] systems;
-	
-	void OnEnable()
-	{
-		systems = GetComponentsInChildren<ParticleSystem>();
-		
-		foreach(ParticleSystem ps in systems)
-			ps.enableEmission = false;
-		
-		StartCoroutine("WaitFrame");
-	}
-	
-	IEnumerator WaitFrame()
-	{
-		yield return null;
-		
-		foreach(ParticleSystem ps in systems)
-		{
-			ps.enableEmission = true;
-			ps.Play(true);
-		}
-	}
+    private ParticleSystem[] systems;
+
+    void OnEnable()
+    {
+        systems = GetComponentsInChildren<ParticleSystem>();
+
+        foreach (ParticleSystem ps in systems)
+        {
+            var emission = ps.emission;
+            emission.enabled = false;
+        }
+
+        StartCoroutine("WaitFrame");
+    }
+
+    IEnumerator WaitFrame()
+    {
+        yield return null;
+
+        foreach (ParticleSystem ps in systems)
+        {
+            var emission = ps.emission;
+            emission.enabled = true;
+            ps.Play(true);
+        }
+    }
 }
