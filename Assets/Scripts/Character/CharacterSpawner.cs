@@ -5,6 +5,8 @@ using UnityEngine;
 public class CharacterSpawner : MonoBehaviour
 {
     private GameManager gameManager;
+    private EffectManager effectManager;
+
     private CharacterSelect characterSelect;
 
     [Header("Character Resources")]
@@ -15,6 +17,7 @@ public class CharacterSpawner : MonoBehaviour
     private int maxPool = 30;
     public Dictionary<string, List<GameObject>> characterPools;
 
+    List<Transform> effectTransform = new List<Transform>();
     private Vector3[] randomPos = { new Vector3(-1.5f, 0, 0), new Vector3(1.5f, 0, 0),
                                     new Vector3(0, -1.5f, 0), new Vector3(0, 1.5f, 0)};
 
@@ -29,6 +32,8 @@ public class CharacterSpawner : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.Get();
+        effectManager = EffectManager.instance;
+
         characterSelect = gameManager.GetComponent<CharacterSelect>();
 
         curCharacterCount = 0;
@@ -37,25 +42,28 @@ public class CharacterSpawner : MonoBehaviour
         CreateCharacter();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-        }
-    }
-
     public void CreateCharacter()
     {
         if (curCharacterCount < maxCharacterCount)
         {
-            int createRandomHero1 = Random.Range(0, 8);
-            int createRandomHero2 = Random.Range(0, 8);
-            string heroName1 = Type.Character.ToString(createRandomHero1);
-            string heroName2 = Type.Character.ToString(createRandomHero2);
+            int randHeroNum1 = Random.Range(0, 8);
+            int randHeroNum2 = Random.Range(0, 8);
+            string heroName1 = Type.Character.ToString(randHeroNum1);
+            string heroName2 = Type.Character.ToString(randHeroNum2);
 
-            SetCreateUnit(GetCharacter(heroName1));
-            SetCreateUnit(GetCharacter(heroName2));
+            //캐릭터 생성
+            SetCreateUnit(GetCharacter(heroName1), 0, 2);
+            SetCreateUnit(GetCharacter(heroName2), 2, 4);
             curCharacterCount += 2;
+
+            //이펙트 생성
+            for (int i = 0; i < effectTransform.Count; i++)
+            {
+                var effectObj = effectManager.GetEffect("RespawnCircle");
+                effectManager.SetToEffect(effectObj, effectTransform[i]);
+            }
+
+            effectTransform.Clear();
         }
     }
 
@@ -65,9 +73,14 @@ public class CharacterSpawner : MonoBehaviour
         {
             int combineID = UIManager.instance.resultID;
             string combineName = Type.Character.ToString(combineID);
+            var effectObj = effectManager.GetEffect("CombineBlast");
 
+            //캐릭터 생성
             SetCombineUnit(GetCharacter(combineName));
             curCharacterCount += 1;
+
+            //이펙트 생성
+            effectManager.SetToEffect(effectObj, GetCharacter(combineName).transform);
         }
     }
 
@@ -77,18 +90,24 @@ public class CharacterSpawner : MonoBehaviour
         {
             int combineID = UIManager.instance.resultID2;
             string combineName = Type.Character.ToString(combineID);
+            var effectObj = effectManager.GetEffect("CombineBlast");
 
+            //캐릭터 생성
             SetCombineUnit(GetCharacter(combineName));
             curCharacterCount += 1;
+
+            //이펙트 생성
+            effectManager.SetToEffect(effectObj, GetCharacter(combineName).transform);
         }
     }
 
-    public void SetCreateUnit(GameObject unitObj)
+    public void SetCreateUnit(GameObject unitObj, int min, int max)
     {
-        int ranPos = Random.Range(0, 4);
+        int ranPos = Random.Range(min, max);
 
         unitObj.transform.position = randomPos[ranPos];
         unitObj.SetActive(true);
+        effectTransform.Add(unitObj.transform);
     }
 
     public void SetCombineUnit(GameObject unitObj)
@@ -144,6 +163,24 @@ public class CharacterSpawner : MonoBehaviour
         for (int i = 0; i < Type.Character.Max; ++i)
         {
             characterPrefabs[i] = Resources.Load(bagicPath + Type.Character.ToString(i)) as GameObject;
+        }
+    }
+
+    public static void TestShuffle<T>(T[] array)
+    {
+        int random1;
+        int random2;
+
+        T tmp;
+
+        for (int index = 0; index < array.Length; ++index)
+        {
+            random1 = Random.Range(0, array.Length);
+            random2 = Random.Range(0, array.Length);
+
+            tmp = array[random1];
+            array[random1] = array[random2];
+            array[random2] = tmp;
         }
     }
 }

@@ -58,6 +58,7 @@ public class CharacterMove : MonoBehaviour
 
     public void MonsterHit()
     {
+        characterAtk.AttackEffect();
         characterAtk.MonsterHit();
     }
 

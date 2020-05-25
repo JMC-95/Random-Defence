@@ -93,13 +93,13 @@ public class MonsterDamage : MonoBehaviour
     {
         if (!isDie)
         {
-            var DeathEffect = EffectManager.instance.GetDeathEffect();
+            var effectManager = EffectManager.instance;
+            var deathEffect = effectManager.GetEffect("DeathSoul");
 
             isDie = true;
             monsterSpawnerScript.curMonster -= 1;
             gameManager.UseGold(-GetComponent<MonsterMove>().Soul);
-            DeathEffect.transform.position = transform.position;
-            DeathEffect.SetActive(true);
+            effectManager.SetToEffect(deathEffect, transform);
             gameObject.SetActive(false);
             Destroy(hpBar);
         }

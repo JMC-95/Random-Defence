@@ -1589,7 +1589,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fTime: 0
-  isCollision: 0
 --- !u!1 &5471777281188206011
 GameObject:
   m_ObjectHideFlags: 0

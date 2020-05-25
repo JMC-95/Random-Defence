@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
         pastTime = waveDelay;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (isGameOver || isGameVictory)
         {

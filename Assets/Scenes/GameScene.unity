@@ -8841,7 +8841,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800617609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13, y: -0.39999998, z: 0}
+  m_LocalPosition: {x: -13, y: -0.39999998, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2095348345}
@@ -10277,7 +10277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410940, guid: 6749a1da7a6538e4bae6c320db525d94, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 410940, guid: 6749a1da7a6538e4bae6c320db525d94, type: 3}
       propertyPath: m_LocalRotation.x
@@ -25581,8 +25581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155f724d713f5aa41b7cdc8e43a7fe63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathEffectPrefab: {fileID: 100002, guid: 646ed295d7110f448b5bef03394520bf, type: 3}
-  deathEffectPools: []
+  effectPrefabs: []
+  bagicPath: Effects/
 --- !u!114 &1907909455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27103,11 +27103,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 481334, guid: c560f8ebc8a69634caa1ce24d5eb1a56, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 481334, guid: c560f8ebc8a69634caa1ce24d5eb1a56, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 481334, guid: c560f8ebc8a69634caa1ce24d5eb1a56, type: 3}
       propertyPath: m_LocalRotation.w

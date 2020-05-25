@@ -6,11 +6,13 @@ public class EffectManager : MonoBehaviour
 {
     public static EffectManager instance = null;
 
-    [Header("Object pool")]
-    [SerializeField] public GameObject deathEffectPrefab;
+    [Header("Effect Resources")]
+    [SerializeField] public GameObject[] effectPrefabs;
+    public string bagicPath = "Effects/";
 
+    [Header("Object pool")]
     private int maxPool = 50;
-    public List<GameObject> deathEffectPools = new List<GameObject>();
+    public Dictionary<string, List<GameObject>> effectPools;
 
     void Awake()
     {
@@ -26,31 +28,59 @@ public class EffectManager : MonoBehaviour
         CreatePooling();
     }
 
-    public GameObject GetDeathEffect()
+    public void SetToEffect(GameObject effectObj, Transform effectTransform)
     {
-        for (int i = 0; i < deathEffectPools.Count; i++)
+        effectObj.transform.position = effectTransform.position;
+        effectObj.SetActive(true);
+    }
+
+    public GameObject GetEffect(string effectName)
+    {
+        var list = effectPools[effectName];
+
+        for (int i = 0; i < list.Count; i++)
         {
-            if (deathEffectPools[i].activeSelf == false)
+            if (list[i].activeSelf == false)
             {
-                return deathEffectPools[i];
+                return list[i];
             }
         }
 
         return null;
     }
 
-
     public void CreatePooling()
     {
         GameObject objectPools = new GameObject("EffectPooling");
 
-        for (int i = 0; i < maxPool; i++)
-        {
-            var death = Instantiate<GameObject>(deathEffectPrefab, objectPools.transform);
+        effectPools = new Dictionary<string, List<GameObject>>();
+        LoadEffectPrefabs();
 
-            death.name = "DeathEffect";
-            death.SetActive(false);
-            deathEffectPools.Add(death);
+        for (int i = 0; i < Type.Effect.Max; ++i)
+        {
+            var effectName = Type.Effect.ToString(i);
+
+            List<GameObject> effectPool = new List<GameObject>();
+
+            for (int j = 0; j < maxPool; j++)
+            {
+                var effect = Instantiate<GameObject>(effectPrefabs[i], objectPools.transform) as GameObject;
+
+                effectPool.Add(effect);
+                effect.SetActive(false);
+            }
+
+            effectPools.Add(effectName, effectPool);
+        }
+    }
+
+    public void LoadEffectPrefabs()
+    {
+        effectPrefabs = new GameObject[Type.Effect.Max];
+
+        for (int i = 0; i < Type.Effect.Max; ++i)
+        {
+            effectPrefabs[i] = Resources.Load(bagicPath + Type.Effect.ToString(i)) as GameObject;
         }
     }
 }

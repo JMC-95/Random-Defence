@@ -94,7 +94,7 @@ public class UIManager : MonoBehaviour
         time = 45;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateUI();
         UpdateBtn();
@@ -122,7 +122,8 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.curWave < 6)
         {
-            if (time < 30) skip.gameObject.SetActive(true);
+            //if (time < 30) skip.gameObject.SetActive(true);
+            if (time < 45) skip.gameObject.SetActive(true);
             else skip.gameObject.SetActive(false);
         }
         else skip.gameObject.SetActive(false);
