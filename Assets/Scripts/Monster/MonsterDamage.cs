@@ -30,7 +30,7 @@ public class MonsterDamage : MonoBehaviour
         skin = GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //체력바의 위치 변경
         if (transform.localScale.x == -2)

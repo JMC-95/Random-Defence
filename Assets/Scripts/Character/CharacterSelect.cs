@@ -47,4 +47,10 @@ public class CharacterSelect : MonoBehaviour
             }
         }
     }
+
+    public void UnSelect()
+    {
+        isSelect = false;
+        character.UnSelect();
+    }
 }

@@ -73,8 +73,6 @@ public class DataManager : MonoBehaviour
     public HeroData[] heroData;
     public CombineData[] combineData;
 
-    public eHero hero;
-
     void Awake()
     {
         if (instance == null)

@@ -18,7 +18,7 @@ public class CFX_AutoDestructShuriken : MonoBehaviour
 		StartCoroutine("CheckIfAlive");
 	}
 	
-	IEnumerator CheckIfAlive ()
+	IEnumerator CheckIfAlive()
 	{
 		ParticleSystem ps = this.GetComponent<ParticleSystem>();
 		

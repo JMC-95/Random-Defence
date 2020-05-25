@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
 
     private CharacterSelect characterSelectScript;
+    private CharacterSpawner characterSpawnerScript;
     private MonsterSpawner monsterSpawnerScript;
 
     public GameObject contentObj;
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
     private float time;
 
     public bool isCombineTable;
+    private bool isCombineBase;
     //CombineButton
     private bool isSameMat;
     private bool isSameMat_1;
@@ -86,9 +88,8 @@ public class UIManager : MonoBehaviour
         gameManager = GameManager.Get();
 
         characterSelectScript = gameManager.GetComponent<CharacterSelect>();
+        characterSpawnerScript = GameObject.Find("CharacterSpawner").GetComponent<CharacterSpawner>();
         monsterSpawnerScript = GameObject.Find("MonsterSpawner").GetComponent<MonsterSpawner>();
-
-        playerObj = GameObject.FindGameObjectsWithTag("Player");
 
         time = 45;
     }
@@ -102,14 +103,16 @@ public class UIManager : MonoBehaviour
 
     void UpdateUI()
     {
-        var curSoul = gameManager.soul;
-        var curWave = gameManager.curWave;
-        var maxWave = gameManager.maxWave;
-        var curGen = monsterSpawnerScript.curMonster;
-        var maxGen = monsterSpawnerScript.maxMonster;
+        int curSoul = gameManager.soul;
+        int curWave = gameManager.curWave;
+        int maxWave = gameManager.maxWave;
+        int curGenCharacter = characterSpawnerScript.curCharacterCount;
+        int maxGenCharacter = characterSpawnerScript.maxCharacterCount;
+        int curGen = monsterSpawnerScript.curMonster;
+        int maxGen = monsterSpawnerScript.maxMonster;
 
         soulCount.text = curSoul.ToString();
-        //humanCount.text = gameManager.gold.ToString("00") + " / 50";
+        humanCount.text = curGenCharacter.ToString("00") + " / " + maxGenCharacter.ToString("00");
         waveCount.text = curWave.ToString("00") + " / " + maxWave.ToString("00");
         genCount.text = curGen.ToString("00") + " / " + maxGen.ToString("00");
         timer.text = "00 : " + time.ToString("00");
@@ -131,25 +134,30 @@ public class UIManager : MonoBehaviour
 
         if (time < 0)
         {
+            if (gameManager.stageEnd) gameManager.StartStage();
+
             time = 45;
             gameManager.StartWave();
-
-            if (gameManager.stageEnd) gameManager.StartStage();
+            characterSpawnerScript.CreateCharacter();
         }
     }
 
     public void Skip()
     {
+        if (gameManager.stageEnd) gameManager.StartStage();
+
         time = 45;
         gameManager.StartWave();
-
-        if (gameManager.stageEnd) gameManager.StartStage();
+        characterSpawnerScript.CreateCharacter();
     }
 
     public void UpdateInfo()
     {
         var player = characterSelectScript.target.GetComponent<CharacterInfomation>();
         var playerRank = playerInfoObj.transform.GetChild(1);
+
+        //현재 하이어라키에 존재하는 모든 플레이어 오브젝트를 배열에 담는다.
+        playerObj = GameObject.FindGameObjectsWithTag("Player");
 
         //List 초기화
         material2Obj.Clear();
@@ -163,7 +171,7 @@ public class UIManager : MonoBehaviour
         mat3List.Clear();
         mat4List.Clear();
 
-        //캐릭터 인포메이션 표시
+        //캐릭터 정보 표시
         playerInfoObj.gameObject.SetActive(true);
         playerInfoObj.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + player.sName);
         playerInfoObj.transform.GetChild(2).GetComponent<Text>().text = "Lv. " + player.nLevel.ToString();
@@ -189,6 +197,7 @@ public class UIManager : MonoBehaviour
 
                 if (player.nID + 1 == combineBase.nID)
                 {
+                    isCombineBase = true;
                     resIDList.Add(combineRes.nID);
                     matIDList.Add(combineMat2.nID);
                     resList.Add(combineRes.sName);
@@ -214,7 +223,7 @@ public class UIManager : MonoBehaviour
                         combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
                         combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
                         combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
+                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color(255, 255, 255, 255);
                         combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
                         combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
                         combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
@@ -224,14 +233,17 @@ public class UIManager : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < playerObj.Length; i++)
+            if (isCombineBase)
             {
-                var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
-                var curMatID = matIDList[0] - 1;
-
-                if (curPlayerID == curMatID)
+                for (int i = 0; i < playerObj.Length; i++)
                 {
-                    isMaterial = true;
+                    var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
+                    var curMatID = matIDList[0] - 1;
+
+                    if (curPlayerID == curMatID)
+                    {
+                        isMaterial = true;
+                    }
                 }
             }
         }
@@ -253,6 +265,7 @@ public class UIManager : MonoBehaviour
 
                 if (player.nID + 1 == combineBase.nID)
                 {
+                    isCombineBase = true;
                     resIDList.Add(combineRes.nID);
                     matIDList.Add(combineMat2.nID);
                     matIDList.Add(combineMat3.nID);
@@ -296,52 +309,60 @@ public class UIManager : MonoBehaviour
 
             if (player.nID != (int)eHero.Samurai - 1)
             {
-                for (int i = 0; i < playerObj.Length; i++)
+                if (isCombineBase)
                 {
-                    var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
-                    var curMatID = matIDList[0] - 1;
-                    var curMatID_1 = matIDList[1] - 1;
+                    for (int i = 0; i < playerObj.Length; i++)
+                    {
+                        var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
+                        var curMatID = matIDList[0] - 1;
+                        var curMatID_1 = matIDList[1] - 1;
 
-                    if (curPlayerID == curMatID)
-                    {
-                        isSameMat = true;
+                        if (curPlayerID == curMatID)
+                        {
+                            isSameMat = true;
+                        }
+                        if (curPlayerID == curMatID_1)
+                        {
+                            isSameMat_1 = true;
+                        }
                     }
-                    if (curPlayerID == curMatID_1)
-                    {
-                        isSameMat_1 = true;
-                    }
+
+                    if (isSameMat && isSameMat_1) isMaterial = true;
                 }
-                if (isSameMat && isSameMat_1) isMaterial = true;
             }
             else
             {
-                for (int i = 0; i < playerObj.Length; i++)
+                if (isCombineBase)
                 {
-                    var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
-                    var curMatID = matIDList[0] - 1;
-                    var curMatID_1 = matIDList[1] - 1;
-                    var curMatID_2 = matIDList[2] - 1;
-                    var curMatID_3 = matIDList[3] - 1;
+                    for (int i = 0; i < playerObj.Length; i++)
+                    {
+                        var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
+                        var curMatID = matIDList[0] - 1;
+                        var curMatID_1 = matIDList[1] - 1;
+                        var curMatID_2 = matIDList[2] - 1;
+                        var curMatID_3 = matIDList[3] - 1;
 
-                    if (curPlayerID == curMatID)
-                    {
-                        isSameMat = true;
+                        if (curPlayerID == curMatID)
+                        {
+                            isSameMat = true;
+                        }
+                        if (curPlayerID == curMatID_1)
+                        {
+                            isSameMat_1 = true;
+                        }
+                        if (curPlayerID == curMatID_2)
+                        {
+                            isSameMat_2 = true;
+                        }
+                        if (curPlayerID == curMatID_3)
+                        {
+                            isSameMat_3 = true;
+                        }
                     }
-                    if (curPlayerID == curMatID_1)
-                    {
-                        isSameMat_1 = true;
-                    }
-                    if (curPlayerID == curMatID_2)
-                    {
-                        isSameMat_2 = true;
-                    }
-                    if (curPlayerID == curMatID_3)
-                    {
-                        isSameMat_3 = true;
-                    }
+
+                    if (isSameMat && isSameMat_1) isMaterial = true;
+                    if (isSameMat_2 && isSameMat_3) isMaterial_1 = true;
                 }
-                if (isSameMat && isSameMat_1) isMaterial = true;
-                if (isSameMat_2 && isSameMat_3) isMaterial_1 = true;
             }
         }
         //3성
@@ -363,6 +384,7 @@ public class UIManager : MonoBehaviour
 
                 if (player.nID + 1 == combineBase.nID)
                 {
+                    isCombineBase = true;
                     resIDList.Add(combineRes.nID);
                     matIDList.Add(combineMat2.nID);
                     matIDList.Add(combineMat3.nID);
@@ -410,28 +432,31 @@ public class UIManager : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < playerObj.Length; i++)
+            if (isCombineBase)
             {
-                var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
-                var curMatID = matIDList[0] - 1;
-                var curMatID_1 = matIDList[1] - 1;
-                var curMatID_2 = matIDList[2] - 1;
+                for (int i = 0; i < playerObj.Length; i++)
+                {
+                    var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
+                    var curMatID = matIDList[0] - 1;
+                    var curMatID_1 = matIDList[1] - 1;
+                    var curMatID_2 = matIDList[2] - 1;
 
-                if (curPlayerID == curMatID)
-                {
-                    isSameMat = true;
+                    if (curPlayerID == curMatID)
+                    {
+                        isSameMat = true;
+                    }
+                    if (curPlayerID == curMatID_1)
+                    {
+                        isSameMat_1 = true;
+                    }
+                    if (curPlayerID == curMatID_2)
+                    {
+                        isSameMat_2 = true;
+                    }
                 }
-                if (curPlayerID == curMatID_1)
-                {
-                    isSameMat_1 = true;
-                }
-                if (curPlayerID == curMatID_2)
-                {
-                    isSameMat_2 = true;
-                }
+
+                if (isSameMat && isSameMat_1 && isSameMat_2) isMaterial = true;
             }
-
-            if (isSameMat && isSameMat_1 && isSameMat_2) isMaterial = true;
         }
         //4성
         else
@@ -447,6 +472,17 @@ public class UIManager : MonoBehaviour
 
     public void UpdateInfoExit()
     {
+        //게임 오브젝트 초기화
+        playerObj = null;
+
+        //Bool 초기화
+        isSameMat = false;
+        isSameMat_1 = false;
+        isSameMat_2 = false;
+        isSameMat_3 = false;
+        isMaterial = false;
+        isMaterial_1 = false;
+        isCombineBase = false;
         playerInfoObj.gameObject.SetActive(false);
 
         for (int i = 0; i < selectCombineObj.transform.childCount; i++)
@@ -457,31 +493,30 @@ public class UIManager : MonoBehaviour
 
     public void Sell()
     {
-        var player = characterSelectScript.target.GetComponent<CharacterInfomation>();
+        var target = characterSelectScript.target;
+        var player = target.GetComponent<CharacterInfomation>();
 
         UpdateInfoExit();
+
         gameManager.UseGold(-player.nSell);
-        characterSelectScript.isSelect = false;
-        characterSelectScript.target.gameObject.SetActive(false);
+        characterSpawnerScript.curCharacterCount -= 1;
+        characterSelectScript.UnSelect();
+        target.gameObject.SetActive(false);
     }
 
     public void Combine1()
     {
         if (isMaterial)
         {
-            isSameMat = false;
-            isSameMat_1 = false;
-            isSameMat_2 = false;
-            isSameMat_3 = false;
-            isMaterial = false;
-            isMaterial_1 = false;
+            var target = characterSelectScript.target;
 
             CombineButton1();
             UpdateInfoExit();
 
             resultID = resIDList[0] - 1;
-            characterSelectScript.isSelect = false;
-            characterSelectScript.target.gameObject.SetActive(false);
+            characterSpawnerScript.curCharacterCount -= 1;
+            characterSelectScript.UnSelect();
+            target.gameObject.SetActive(false);
 
             spawnerObj.GetComponent<CharacterSpawner>().CombineCharacter_1();
         }
@@ -491,19 +526,15 @@ public class UIManager : MonoBehaviour
     {
         if (isMaterial_1)
         {
-            isSameMat = false;
-            isSameMat_1 = false;
-            isSameMat_2 = false;
-            isSameMat_3 = false;
-            isMaterial = false;
-            isMaterial_1 = false;
+            var target = characterSelectScript.target;
 
             CombineButton2();
             UpdateInfoExit();
 
             resultID2 = resIDList[1] - 1;
-            characterSelectScript.isSelect = false;
-            characterSelectScript.target.gameObject.SetActive(false);
+            characterSpawnerScript.curCharacterCount -= 1;
+            characterSelectScript.UnSelect();
+            target.gameObject.SetActive(false);
 
             spawnerObj.GetComponent<CharacterSpawner>().CombineCharacter_2();
         }
@@ -698,6 +729,7 @@ public class UIManager : MonoBehaviour
         //1성
         if (-1 < player.nID && player.nID < 8)
         {
+            characterSpawnerScript.curCharacterCount -= 1;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -713,6 +745,7 @@ public class UIManager : MonoBehaviour
         //2성
         else if (7 < player.nID && player.nID < 16)
         {
+            characterSpawnerScript.curCharacterCount -= 2;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -734,6 +767,7 @@ public class UIManager : MonoBehaviour
         //3성
         else if (15 < player.nID && player.nID < 23)
         {
+            characterSpawnerScript.curCharacterCount -= 3;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -767,6 +801,7 @@ public class UIManager : MonoBehaviour
         //1성
         if (-1 < player.nID && player.nID < 8)
         {
+            characterSpawnerScript.curCharacterCount -= 1;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -782,6 +817,7 @@ public class UIManager : MonoBehaviour
         //2성
         else if (7 < player.nID && player.nID < 16)
         {
+            characterSpawnerScript.curCharacterCount -= 2;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -803,6 +839,7 @@ public class UIManager : MonoBehaviour
         //3성
         else if (15 < player.nID && player.nID < 23)
         {
+            characterSpawnerScript.curCharacterCount -= 3;
             for (int i = 0; i < playerObj.Length; i++)
             {
                 var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;

@@ -17,7 +17,7 @@ public class MonsterSpawner : MonoBehaviour
     public int genCountLimit;           //한 웨이브에 생성될수 있는 오브젝트의 수
 
     [Header("Object Pool")]
-    private int maxPool = 60;           //오브젝트 풀내 오브젝트의 수
+    private int maxPool = 50;           //오브젝트 풀내 오브젝트의 수
     public Dictionary<string, List<GameObject>> monsterPools;
 
     List<GenInfomation> curWaveMonsterList = new List<GenInfomation>();

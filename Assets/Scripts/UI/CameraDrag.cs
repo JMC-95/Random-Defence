@@ -15,7 +15,7 @@ public class CameraDrag : MonoBehaviour
         dist = transform.position.z;  // Distance camera is above map
     }
 
-    void Update()
+    void LateUpdate()
     {
         Move();
         Zoom();

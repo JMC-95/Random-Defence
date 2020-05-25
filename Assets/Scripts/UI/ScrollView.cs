@@ -10,11 +10,6 @@ public class ScrollView : MonoBehaviour
     [SerializeField]
     private Transform _content = null;
 
-    void Start()
-    {
-
-    }
-
     public void AddImage()
     {
         var instance = Instantiate(_image);

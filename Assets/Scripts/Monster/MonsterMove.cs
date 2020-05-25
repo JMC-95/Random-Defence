@@ -28,7 +28,7 @@ public class MonsterMove : MonoBehaviour
         wayPoints.SetValue(new Vector3(-13f, -0.4f, transform.position.z), 3);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (wayPointIndex < wayPoints.Length)
         {

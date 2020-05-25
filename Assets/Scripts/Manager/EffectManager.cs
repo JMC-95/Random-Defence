@@ -9,8 +9,8 @@ public class EffectManager : MonoBehaviour
     [Header("Object pool")]
     [SerializeField] public GameObject deathEffectPrefab;
 
-    public int maxPool = 60;
-    public List<GameObject> deathEffectPool = new List<GameObject>();
+    private int maxPool = 50;
+    public List<GameObject> deathEffectPools = new List<GameObject>();
 
     void Awake()
     {
@@ -28,11 +28,11 @@ public class EffectManager : MonoBehaviour
 
     public GameObject GetDeathEffect()
     {
-        for (int i = 0; i < deathEffectPool.Count; i++)
+        for (int i = 0; i < deathEffectPools.Count; i++)
         {
-            if (deathEffectPool[i].activeSelf == false)
+            if (deathEffectPools[i].activeSelf == false)
             {
-                return deathEffectPool[i];
+                return deathEffectPools[i];
             }
         }
 
@@ -47,9 +47,10 @@ public class EffectManager : MonoBehaviour
         for (int i = 0; i < maxPool; i++)
         {
             var death = Instantiate<GameObject>(deathEffectPrefab, objectPools.transform);
+
             death.name = "DeathEffect";
             death.SetActive(false);
-            deathEffectPool.Add(death);
+            deathEffectPools.Add(death);
         }
     }
 }

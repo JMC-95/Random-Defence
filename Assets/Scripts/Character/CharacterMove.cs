@@ -20,19 +20,27 @@ public class CharacterMove : MonoBehaviour
         speed = 4.0f;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if ((Vector2)transform.position != targetPos)
+        if (anim.GetBool("Walk"))
         {
-            var playerPos = transform.position;
-            transform.position = Vector2.MoveTowards(playerPos, targetPos, speed * Time.deltaTime);
+            if ((Vector2)transform.position != targetPos)
+            {
+                var playerPos = transform.position;
+                transform.position = Vector2.MoveTowards(playerPos, targetPos, speed * Time.deltaTime);
+            }
+            else anim.SetBool("Walk", false);
         }
-        else anim.SetBool("Walk", false);
     }
 
     public void Select()
     {
         characterAtk.OnAtkRange();
+    }
+
+    public void UnSelect()
+    {
+        characterAtk.OffAtkRange();
     }
 
     public void Move()

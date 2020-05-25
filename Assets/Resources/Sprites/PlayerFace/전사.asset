@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\uD504\uB9AC\uC2A4\uD2B8"
+  m_Name: "\uC804\uC0AC"
   m_Rect:
     serializedVersion: 2
     x: 25
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    f620f76bf6b16d241a93ee38d827db5c: 21300000
+    91723579322538447b6b68b2fb47f6cd: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:

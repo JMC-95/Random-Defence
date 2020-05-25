@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     public GameObject monsterSpawner;
+
     public MonsterSpawner monsterSpawnerScript;
     public UIManager uiManagerScript;
 
