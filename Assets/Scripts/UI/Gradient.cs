@@ -32,6 +32,7 @@ public class Gradient : BaseMeshEffect
         for (int i = 1; i < count; i++)
         {
             float y = vertexList[i].position.y;
+
             if (y > topY)
             {
                 topY = y;

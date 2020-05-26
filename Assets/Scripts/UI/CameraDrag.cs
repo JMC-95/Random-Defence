@@ -30,7 +30,6 @@ public class CameraDrag : MonoBehaviour
                 MouseStart = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist);
                 MouseStart = Camera.main.ScreenToWorldPoint(MouseStart);
                 MouseStart.z = transform.position.z;
-
             }
             else if (Input.GetMouseButton(1))
             {

@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     public Text waveCount;
     public Text genCount;
     public Text timer;
+    public Text BossText;
 
     public Image combineImage;
 
@@ -56,7 +57,8 @@ public class UIManager : MonoBehaviour
     public int resultID;
     public int resultID2;
 
-    private float time;
+    private float changeAlpha = 0.01f;
+    public float time;
 
     public bool isCombineTable;
     private bool isCombineBase;
@@ -108,28 +110,24 @@ public class UIManager : MonoBehaviour
         time = 45;
     }
 
-    void FixedUpdate()
-    {
-        UpdateUI();
-        UpdateBtn();
-        UpdateTime();
-    }
-
     void UpdateUI()
     {
-        int curSoul = gameManager.soul;
-        int curWave = gameManager.curWave;
-        int maxWave = gameManager.maxWave;
-        int curGenCharacter = characterSpawnerScript.curCharacterCount;
-        int maxGenCharacter = characterSpawnerScript.maxCharacterCount;
-        int curGen = monsterSpawnerScript.curMonster;
-        int maxGen = monsterSpawnerScript.maxMonster;
+        if (!gameManager.isGameOver)
+        {
+            int curSoul = gameManager.soul;
+            int curWave = gameManager.curWave;
+            int maxWave = gameManager.maxWave;
+            int curGenCharacter = characterSpawnerScript.curCharacterCount;
+            int maxGenCharacter = characterSpawnerScript.maxCharacterCount;
+            int curGen = monsterSpawnerScript.curMonster;
+            int maxGen = monsterSpawnerScript.maxMonster;
 
-        soulCount.text = curSoul.ToString();
-        humanCount.text = curGenCharacter.ToString("00") + " / " + maxGenCharacter.ToString("00");
-        waveCount.text = curWave.ToString("00") + " / " + maxWave.ToString("00");
-        genCount.text = curGen.ToString("00") + " / " + maxGen.ToString("00");
-        timer.text = "00 : " + time.ToString("00");
+            soulCount.text = curSoul.ToString();
+            waveCount.text = curWave.ToString("00") + " / " + maxWave.ToString("00");
+            humanCount.text = curGenCharacter.ToString("00") + " / " + maxGenCharacter.ToString("00");
+            genCount.text = curGen.ToString("00") + " / " + maxGen.ToString("00");
+            timer.text = "00 : " + time.ToString("00");
+        }
     }
 
     void UpdateBtn()
@@ -158,6 +156,33 @@ public class UIManager : MonoBehaviour
                 time = 45;
                 gameManager.StartWave();
                 characterSpawnerScript.CreateCharacter();
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        UpdateUI();
+        UpdateBtn();
+        UpdateTime();
+    }
+
+    public void ShowBossEmergy()
+    {
+        if (changeAlpha > 0.0f)
+        {
+            BossText.color = new Vector4(BossText.color.r, BossText.color.g, BossText.color.b, BossText.color.a - changeAlpha);
+            if (BossText.color.a <= 0.0f)
+            {
+                changeAlpha = -changeAlpha;
+            }
+        }
+        else
+        {
+            BossText.color = new Vector4(BossText.color.r, BossText.color.g, BossText.color.b, BossText.color.a - changeAlpha);
+            if (BossText.color.a >= 1.0f)
+            {
+                changeAlpha = -changeAlpha;
             }
         }
     }
@@ -223,38 +248,40 @@ public class UIManager : MonoBehaviour
                     resList.Add(combineRes.sName);
                     baseList.Add(combineBase.sName);
                     mat2List.Add(combineMat2.sName);
-
-                    for (int j = 0; j < baseList.Count; j++)
-                    {
-                        var combineObj = selectCombineObj.transform.GetChild(j);
-
-                        combineObj.gameObject.SetActive(true);
-                        selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-70, 0, 0);
-                        combineObj.GetChild(4).gameObject.SetActive(false);
-                        combineObj.GetChild(5).gameObject.SetActive(false);
-                        combineObj.GetChild(6).gameObject.SetActive(false);
-                        combineObj.GetChild(7).gameObject.SetActive(false);
-                        combineObj.GetChild(10).gameObject.SetActive(false);
-                        combineObj.GetChild(11).gameObject.SetActive(false);
-
-                        combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
-                        combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
-                        combineObj.GetChild(0).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
-                        combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
-                        combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
-                        combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color(255, 255, 255, 255);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
-                        combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
-                        combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
-                        combineObj.GetChild(3).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
-                        combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
-                    }
                 }
             }
 
             if (isCombineBase)
             {
+                //캐릭터의 조합 인터페이스를 나타낸다.
+                for (int j = 0; j < baseList.Count; j++)
+                {
+                    var combineObj = selectCombineObj.transform.GetChild(j);
+
+                    combineObj.gameObject.SetActive(true);
+                    selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-70, 0, 0);
+                    combineObj.GetChild(4).gameObject.SetActive(false);
+                    combineObj.GetChild(5).gameObject.SetActive(false);
+                    combineObj.GetChild(6).gameObject.SetActive(false);
+                    combineObj.GetChild(7).gameObject.SetActive(false);
+                    combineObj.GetChild(10).gameObject.SetActive(false);
+                    combineObj.GetChild(11).gameObject.SetActive(false);
+
+                    combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
+                    combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
+                    combineObj.GetChild(0).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
+                    combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
+                    combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
+                    combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color(255, 255, 255, 255);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
+                    combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
+                    combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
+                    combineObj.GetChild(3).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
+                    combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
+                }
+
+                //캐릭터의 조합에 필요한 재료를 확인한다.
                 for (int i = 0; i < playerObj.Length; i++)
                 {
                     var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -293,43 +320,45 @@ public class UIManager : MonoBehaviour
                     baseList.Add(combineBase.sName);
                     mat2List.Add(combineMat2.sName);
                     mat3List.Add(combineMat3.sName);
-
-                    for (int j = 0; j < baseList.Count; j++)
-                    {
-                        var combineObj = selectCombineObj.transform.GetChild(j);
-
-                        combineObj.gameObject.SetActive(true);
-                        selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 0, 0);
-                        combineObj.GetChild(4).gameObject.SetActive(true);
-                        combineObj.GetChild(5).gameObject.SetActive(true);
-                        combineObj.GetChild(6).gameObject.SetActive(false);
-                        combineObj.GetChild(7).gameObject.SetActive(false);
-                        combineObj.GetChild(10).gameObject.SetActive(true);
-                        combineObj.GetChild(11).gameObject.SetActive(false);
-
-                        combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
-                        combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
-                        combineObj.GetChild(0).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
-                        combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
-                        combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
-                        combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
-                        combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
-                        combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
-                        combineObj.GetChild(3).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
-                        combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
-                        combineObj.GetChild(4).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
-                        combineObj.GetChild(5).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat3List[j]);
-                        combineObj.GetChild(5).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
-                        combineObj.GetChild(5).GetComponentInChildren<Text>().text = mat3List[j];
-                    }
                 }
             }
 
-            if (player.nID != (int)eHero.Samurai - 1)
+            if (isCombineBase)
             {
-                if (isCombineBase)
+                //캐릭터의 조합 인터페이스를 나타낸다.
+                for (int j = 0; j < baseList.Count; j++)
+                {
+                    var combineObj = selectCombineObj.transform.GetChild(j);
+
+                    combineObj.gameObject.SetActive(true);
+                    selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 0, 0);
+                    combineObj.GetChild(4).gameObject.SetActive(true);
+                    combineObj.GetChild(5).gameObject.SetActive(true);
+                    combineObj.GetChild(6).gameObject.SetActive(false);
+                    combineObj.GetChild(7).gameObject.SetActive(false);
+                    combineObj.GetChild(10).gameObject.SetActive(true);
+                    combineObj.GetChild(11).gameObject.SetActive(false);
+
+                    combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
+                    combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
+                    combineObj.GetChild(0).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
+                    combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
+                    combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
+                    combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
+                    combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
+                    combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
+                    combineObj.GetChild(3).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
+                    combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
+                    combineObj.GetChild(4).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
+                    combineObj.GetChild(5).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat3List[j]);
+                    combineObj.GetChild(5).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
+                    combineObj.GetChild(5).GetComponentInChildren<Text>().text = mat3List[j];
+                }
+
+                //캐릭터의 조합에 필요한 재료를 확인한다.
+                if (player.nID != (int)eHero.Samurai - 1)
                 {
                     for (int i = 0; i < playerObj.Length; i++)
                     {
@@ -349,10 +378,7 @@ public class UIManager : MonoBehaviour
 
                     if (isSameMat && isSameMat_1) isMaterial = true;
                 }
-            }
-            else
-            {
-                if (isCombineBase)
+                else
                 {
                     for (int i = 0; i < playerObj.Length; i++)
                     {
@@ -414,46 +440,48 @@ public class UIManager : MonoBehaviour
                     mat2List.Add(combineMat2.sName);
                     mat3List.Add(combineMat3.sName);
                     mat4List.Add(combineMat4.sName);
-
-                    for (int j = 0; j < baseList.Count; j++)
-                    {
-                        var combineObj = selectCombineObj.transform.GetChild(j);
-
-                        combineObj.gameObject.SetActive(true);
-                        selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-190, 0, 0);
-                        combineObj.GetChild(4).gameObject.SetActive(true);
-                        combineObj.GetChild(5).gameObject.SetActive(true);
-                        combineObj.GetChild(6).gameObject.SetActive(true);
-                        combineObj.GetChild(7).gameObject.SetActive(true);
-                        combineObj.GetChild(10).gameObject.SetActive(true);
-                        combineObj.GetChild(11).gameObject.SetActive(true);
-
-                        combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
-                        combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
-                        combineObj.GetChild(0).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
-                        combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
-                        combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/4성");
-                        combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color32(100, 200, 120, 255);
-                        combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
-                        combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
-                        combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
-                        combineObj.GetChild(3).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
-                        combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
-                        combineObj.GetChild(4).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
-                        combineObj.GetChild(5).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat3List[j]);
-                        combineObj.GetChild(5).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
-                        combineObj.GetChild(5).GetComponentInChildren<Text>().text = mat3List[j];
-                        combineObj.GetChild(6).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
-                        combineObj.GetChild(7).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat4List[j]);
-                        combineObj.GetChild(7).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
-                        combineObj.GetChild(7).GetComponentInChildren<Text>().text = mat4List[j];
-                    }
                 }
             }
 
             if (isCombineBase)
             {
+                //캐릭터의 조합 인터페이스를 나타낸다.
+                for (int j = 0; j < baseList.Count; j++)
+                {
+                    var combineObj = selectCombineObj.transform.GetChild(j);
+
+                    combineObj.gameObject.SetActive(true);
+                    selectCombineObj.GetComponent<RectTransform>().anchoredPosition = new Vector3(-190, 0, 0);
+                    combineObj.GetChild(4).gameObject.SetActive(true);
+                    combineObj.GetChild(5).gameObject.SetActive(true);
+                    combineObj.GetChild(6).gameObject.SetActive(true);
+                    combineObj.GetChild(7).gameObject.SetActive(true);
+                    combineObj.GetChild(10).gameObject.SetActive(true);
+                    combineObj.GetChild(11).gameObject.SetActive(true);
+
+                    combineObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
+                    combineObj.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + baseList[j]);
+                    combineObj.GetChild(0).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
+                    combineObj.GetChild(0).GetComponentInChildren<Text>().text = baseList[j];
+                    combineObj.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/4성");
+                    combineObj.GetChild(1).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + resList[j]);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().color = new Color32(100, 200, 120, 255);
+                    combineObj.GetChild(1).GetChild(0).GetComponentInChildren<Text>().text = resList[j];
+                    combineObj.GetChild(2).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
+                    combineObj.GetChild(3).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat2List[j]);
+                    combineObj.GetChild(3).GetComponentInChildren<Text>().color = new Color32(230, 230, 180, 255);
+                    combineObj.GetChild(3).GetComponentInChildren<Text>().text = mat2List[j];
+                    combineObj.GetChild(4).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
+                    combineObj.GetChild(5).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat3List[j]);
+                    combineObj.GetChild(5).GetChild(0).GetComponentInChildren<Text>().color = new Color32(255, 255, 255, 255);
+                    combineObj.GetChild(5).GetComponentInChildren<Text>().text = mat3List[j];
+                    combineObj.GetChild(6).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
+                    combineObj.GetChild(7).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/PlayerFace/" + mat4List[j]);
+                    combineObj.GetChild(7).GetComponentInChildren<Text>().color = new Color32(130, 70, 50, 255);
+                    combineObj.GetChild(7).GetComponentInChildren<Text>().text = mat4List[j];
+                }
+
+                //캐릭터의 조합에 필요한 재료를 확인한다.
                 for (int i = 0; i < playerObj.Length; i++)
                 {
                     var curPlayerID = playerObj[i].GetComponent<CharacterInfomation>().nID;
@@ -564,6 +592,20 @@ public class UIManager : MonoBehaviour
     {
         combineImage.gameObject.SetActive(true);
         isCombineTable = true;
+
+        //2성 Tab
+        rating2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-210, 23);
+        rating2.GetComponent<RectTransform>().sizeDelta = selectTab;
+        rating3.GetComponent<RectTransform>().anchoredPosition = new Vector2(-165, 18);
+        rating3.GetComponent<RectTransform>().sizeDelta = normalTab;
+        rating4.GetComponent<RectTransform>().anchoredPosition = new Vector2(-120, 18);
+        rating4.GetComponent<RectTransform>().sizeDelta = normalTab;
+
+        //2성 조합표
+        contentObj.transform.GetChild(4).gameObject.SetActive(true);
+        contentObj.transform.GetChild(5).gameObject.SetActive(true);
+        contentObj.transform.GetChild(6).gameObject.SetActive(true);
+        contentObj.transform.GetChild(7).gameObject.SetActive(true);
 
         //이미지
         for (int i = (int)eHero.Priest; i < (int)eHero.Avenger; i++)

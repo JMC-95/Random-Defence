@@ -9,7 +9,7 @@ public class EffectScript : MonoBehaviour
 
     void OnEnable()
     {
-        StartCoroutine("CheckIfAlive");
+        StartCoroutine(CheckIfAlive());
     }
 
     IEnumerator CheckIfAlive()

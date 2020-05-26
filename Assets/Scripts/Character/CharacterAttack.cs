@@ -43,16 +43,16 @@ public class CharacterAttack : MonoBehaviour
             monster = target;
             monsterDamage = target.GetComponent<MonsterDamage>();
 
+            if (!target.activeInHierarchy)
+            {
+                collMonsters.Remove(target);
+            }
+
             if (transform.parent.tag == "Player")
             {
                 if (target != null && fTime > delay)
                 {
                     anim.SetBool("Attack", true);
-
-                    if (!target.activeInHierarchy)
-                    {
-                        collMonsters.Remove(target);
-                    }
                 }
                 else
                 {

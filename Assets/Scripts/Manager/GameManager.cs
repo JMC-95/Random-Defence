@@ -27,15 +27,11 @@ public class GameManager : MonoBehaviour
     public GameObject monsterSpawner;
 
     public MonsterSpawner monsterSpawnerScript;
-    public UIManager uiManagerScript;
 
-    public int monsterType;
-    public int waveCount = 0;
-    public int lifeCount = 10;
     public int soul;
 
     public float pastTime = 0.0f;
-    public float waveDelay = 5.0f;
+    public float bossDelay = 8.0f;
 
     public bool isWaveEnd = true;
     public bool isGameOver = false;
@@ -49,11 +45,12 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, Dictionary<int, List<GenInfomation>>> GenInfoMation;
 
     public int curStage;
-    public int stageMax;
+    public int maxStage;
     public int curWave;
     public int maxWave;
 
     public bool stageEnd;
+    public bool isSummon;
 
     //GenInfomation define
     private Dictionary<int, Dictionary<int, List<GenInfomation>>> GetGenInfo()
@@ -68,19 +65,19 @@ public class GameManager : MonoBehaviour
         firstWave.Add(1, first);
         //2 Wave - Monster
         var second = new List<GenInfomation>();
-        second.Add(new GenInfomation(Type.Monster.Golem, 100, 4, 10, 10));
+        second.Add(new GenInfomation(Type.Monster.Golem, 100, 4, 10, 20));
         firstWave.Add(2, second);
         //3 Wave - Monster
         var third = new List<GenInfomation>();
-        third.Add(new GenInfomation(Type.Monster.Kerberos, 100, 4, 10, 10));
+        third.Add(new GenInfomation(Type.Monster.Kerberos, 100, 4, 10, 20));
         firstWave.Add(3, third);
         //4 Wave - Monster
         var fourth = new List<GenInfomation>();
-        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 100, 4, 10, 10));
+        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 100, 4, 10, 20));
         firstWave.Add(4, fourth);
         //5 Wave - Monster
         var fifth = new List<GenInfomation>();
-        fifth.Add(new GenInfomation(Type.Monster.Troll, 100, 4, 10, 10));
+        fifth.Add(new GenInfomation(Type.Monster.Troll, 100, 4, 10, 20));
         firstWave.Add(5, fifth);
         //6 Wave - Monster
         var sixth = new List<GenInfomation>();
@@ -125,18 +122,14 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        monsterType = 0;
-        waveCount = 0;
         soul = 500;
         curStage = 1;
+        maxStage = 3;
         curWave = 0;
-        stageMax = 3;
         maxWave = 6;
+        isSummon = true;
         isWaveEnd = true;
         stageEnd = true;
-
-        var uiManager = GameObject.Find("UIManager");
-        uiManagerScript = uiManager.GetComponent<UIManager>();
 
         monsterSpawner = GameObject.Find("MonsterSpawner");
         monsterSpawnerScript = monsterSpawner.GetComponent<MonsterSpawner>();
@@ -155,15 +148,7 @@ public class GameManager : MonoBehaviour
     public void StartWave()
     {
         curWave += 1;
-        pastTime = waveDelay;
-    }
-
-    public void GameEnd()
-    {
-        if (monsterSpawnerScript.curMonster > monsterSpawnerScript.maxMonster)
-        {
-            isGameOver = true;
-        }
+        isSummon = true;
     }
 
     void FixedUpdate()
@@ -173,9 +158,26 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (!isGameOver && !isWaveEnd)
+        if ((monsterSpawnerScript.curMonster > monsterSpawnerScript.maxMonster) ||
+            (curWave == 6 && UIManager.instance.time < 0))
+        {
+            isGameOver = true;
+        }
+
+        if (!isGameOver && !isWaveEnd && !isSummon)
         {
             monsterSpawnerScript.portal.SetActive(true);
+
+            if (UIManager.instance.BossText.gameObject.activeInHierarchy)
+            {
+                pastTime += Time.deltaTime;
+                UIManager.instance.ShowBossEmergy();
+                if (pastTime > bossDelay) UIManager.instance.BossText.gameObject.SetActive(false);
+            }
+            else
+            {
+                pastTime = 0.0f;
+            }
 
             if (monsterSpawnerScript.genCount == monsterSpawnerScript.genCountLimit)
             {
@@ -183,16 +185,12 @@ public class GameManager : MonoBehaviour
 
                 if (isWaveEnd) monsterSpawnerScript.portal.SetActive(false);
 
-                if (curWave > maxWave)
+                if (curWave == 6 && monsterSpawnerScript.curMonster == 0)
                 {
-                    curWave = 0;
                     curStage += 1;
-
-                    if (curStage > stageMax)
-                    {
-                        pastTime = 0.0f;
-                        isGameVictory = true;
-                    }
+                    curWave = 0;
+                    pastTime = 0.0f;
+                    isGameVictory = true;
                 }
             }
         }
@@ -200,17 +198,20 @@ public class GameManager : MonoBehaviour
         {
             if (!stageEnd)
             {
-                if (curWave == 7 && monsterSpawnerScript.curMonster != 0)
+                if (curWave == 6 && monsterSpawnerScript.curMonster != 0)
                 {
                     return;
                 }
 
-                pastTime += Time.deltaTime;
-
-                if (pastTime > waveDelay)
+                if (curWave == 2 && isSummon)
                 {
-                    pastTime = 0.0f;
+                    UIManager.instance.BossText.gameObject.SetActive(true);
+                }
+
+                if (isSummon)
+                {
                     isWaveEnd = false;
+                    isSummon = false;
                     monsterSpawnerScript.ResetGenInfo();
                     StartCoroutine(monsterSpawnerScript.CreateMonster());
                 }
