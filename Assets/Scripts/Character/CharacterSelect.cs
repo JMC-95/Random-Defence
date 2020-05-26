@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class CharacterSelect : MonoBehaviour
 {
+    public GameObject UpgradeObj;
+    public GameObject ShopObj;
     public GameObject target;
     public CharacterMove character;
 
@@ -12,10 +14,11 @@ public class CharacterSelect : MonoBehaviour
     private RaycastHit2D hit;
 
     public bool isSelect = false;
+    public bool isShop = false;
 
     void Start()
     {
-        layerMask = 1 << LayerMask.NameToLayer("Player");
+        layerMask = (1 << LayerMask.NameToLayer("Player")) + (1 << LayerMask.NameToLayer("UI"));
     }
 
     void Update()
@@ -35,6 +38,16 @@ public class CharacterSelect : MonoBehaviour
                     character.Select();
                     isSelect = true;
                 }
+                else if (hit.collider != null && hit.collider.tag == "Button" && !isShop)
+                {
+                    UIManager.instance.upgradeObj.SetActive(true);
+                    isShop = true;
+                }
+                else if (hit.collider != null && hit.collider.tag == "Shop" && !isShop)
+                {
+                    UIManager.instance.shopObj.SetActive(true);
+                    isShop = true;
+                }
                 else
                 {
                     if (target != null && isSelect)
@@ -42,6 +55,11 @@ public class CharacterSelect : MonoBehaviour
                         UIManager.instance.UpdateInfoExit();
                         character.Move();
                         isSelect = false;
+                    }
+                    else if (isShop)
+                    {
+                        UIManager.instance.ExitShop();
+                        isShop = false;
                     }
                 }
             }

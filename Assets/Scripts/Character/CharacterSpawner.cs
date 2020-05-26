@@ -165,22 +165,4 @@ public class CharacterSpawner : MonoBehaviour
             characterPrefabs[i] = Resources.Load(bagicPath + Type.Character.ToString(i)) as GameObject;
         }
     }
-
-    public static void TestShuffle<T>(T[] array)
-    {
-        int random1;
-        int random2;
-
-        T tmp;
-
-        for (int index = 0; index < array.Length; ++index)
-        {
-            random1 = Random.Range(0, array.Length);
-            random2 = Random.Range(0, array.Length);
-
-            tmp = array[random1];
-            array[random1] = array[random2];
-            array[random2] = tmp;
-        }
-    }
 }

@@ -93,17 +93,13 @@ public class DataManager : MonoBehaviour
 
     public void LoadHeroData()
     {
-        string path = Application.dataPath + "/Scripts/JsonData/HeroData.json";
-        string jsonData = File.ReadAllText(path);
-
+        string jsonData = File.ReadAllText(Application.persistentDataPath + "/JsonData/HeroData.json");
         heroData = JsonConvert.DeserializeObject<HeroData[]>(jsonData);
     }
 
     public void LoadCombineData()
     {
-        string path = Application.dataPath + "/Scripts/JsonData/CombineData.json";
-        string jsonData = File.ReadAllText(path);
-
+        string jsonData = File.ReadAllText(Application.persistentDataPath + "/JsonData/CombineData.json");
         combineData = JsonConvert.DeserializeObject<CombineData[]>(jsonData);
     }
 }

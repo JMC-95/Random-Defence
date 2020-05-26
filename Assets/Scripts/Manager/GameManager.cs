@@ -158,6 +158,14 @@ public class GameManager : MonoBehaviour
         pastTime = waveDelay;
     }
 
+    public void GameEnd()
+    {
+        if (monsterSpawnerScript.curMonster > monsterSpawnerScript.maxMonster)
+        {
+            isGameOver = true;
+        }
+    }
+
     void FixedUpdate()
     {
         if (isGameOver || isGameVictory)

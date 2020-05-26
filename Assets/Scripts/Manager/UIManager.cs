@@ -16,8 +16,11 @@ public class UIManager : MonoBehaviour
     public GameObject contentObj;
     public GameObject playerInfoObj;
     public GameObject selectCombineObj;
+    public GameObject upgradeObj;
+    public GameObject shopObj;
     public GameObject spawnerObj;
     GameObject[] playerObj;
+    GameObject[] playersObj;
 
     public Button combine;
     public Button rating2;
@@ -34,6 +37,17 @@ public class UIManager : MonoBehaviour
 
     public Image combineImage;
 
+    //캐릭터 강화
+    public int levelUp1;
+    public int powerUp1;
+    public int levelUp2;
+    public int powerUp2;
+    public int levelUp3;
+    public int powerUp3;
+    public int levelUp4;
+    public int powerUp4;
+
+    //UI
     private int resNum = 9;
     private int matNum = 1;
     private int rank2 = 9;
@@ -120,26 +134,31 @@ public class UIManager : MonoBehaviour
 
     void UpdateBtn()
     {
-        if (gameManager.curWave < 6)
+        if (!gameManager.isGameOver)
         {
-            //if (time < 30) skip.gameObject.SetActive(true);
-            if (time < 45) skip.gameObject.SetActive(true);
+            if (gameManager.curWave < 6)
+            {
+                if (time < 30) skip.gameObject.SetActive(true);
+                else skip.gameObject.SetActive(false);
+            }
             else skip.gameObject.SetActive(false);
         }
-        else skip.gameObject.SetActive(false);
     }
 
     void UpdateTime()
     {
-        time -= Time.deltaTime;
-
-        if (time < 0)
+        if (!gameManager.isGameOver)
         {
-            if (gameManager.stageEnd) gameManager.StartStage();
+            time -= Time.deltaTime;
 
-            time = 45;
-            gameManager.StartWave();
-            characterSpawnerScript.CreateCharacter();
+            if (time < 0)
+            {
+                if (gameManager.stageEnd) gameManager.StartStage();
+
+                time = 45;
+                gameManager.StartWave();
+                characterSpawnerScript.CreateCharacter();
+            }
         }
     }
 
@@ -492,19 +511,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void Sell()
-    {
-        var target = characterSelectScript.target;
-        var player = target.GetComponent<CharacterInfomation>();
-
-        UpdateInfoExit();
-
-        gameManager.UseGold(-player.nSell);
-        characterSpawnerScript.curCharacterCount -= 1;
-        characterSelectScript.UnSelect();
-        target.gameObject.SetActive(false);
-    }
-
     public void Combine1()
     {
         if (isMaterial)
@@ -521,6 +527,19 @@ public class UIManager : MonoBehaviour
 
             spawnerObj.GetComponent<CharacterSpawner>().CombineCharacter_1();
         }
+    }
+
+    public void Sell()
+    {
+        var target = characterSelectScript.target;
+        var player = target.GetComponent<CharacterInfomation>();
+
+        UpdateInfoExit();
+
+        gameManager.UseGold(-player.nSell);
+        characterSpawnerScript.curCharacterCount -= 1;
+        characterSelectScript.UnSelect();
+        target.gameObject.SetActive(false);
     }
 
     public void Combine2()
@@ -577,6 +596,118 @@ public class UIManager : MonoBehaviour
     {
         combineImage.gameObject.SetActive(false);
         isCombineTable = false;
+    }
+
+    public void ExitShop()
+    {
+        upgradeObj.SetActive(false);
+        shopObj.SetActive(false);
+    }
+
+    public void LevelUp1()
+    {
+        if (gameManager.soul >= 50)
+        {
+            playersObj = GameObject.FindGameObjectsWithTag("Player");
+
+            for (int i = 0; i < playersObj.Length; i++)
+            {
+                var id = playersObj[i].GetComponent<CharacterInfomation>().nID;
+
+                if (0 <= id && id < 8)
+                {
+                    playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                }
+            }
+
+            levelUp1 += 1;
+            powerUp1 += 5;
+            gameManager.UseGold(50);
+            upgradeObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp1.ToString();
+        }
+    }
+
+    public void LevelUp2()
+    {
+        if (gameManager.soul >= 100)
+        {
+            playersObj = GameObject.FindGameObjectsWithTag("Player");
+
+            for (int i = 0; i < playersObj.Length; i++)
+            {
+                var id = playersObj[i].GetComponent<CharacterInfomation>().nID;
+
+                if (8 <= id && id < 16)
+                {
+                    playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                }
+            }
+
+            levelUp2 += 1;
+            powerUp2 += 10;
+            gameManager.UseGold(100);
+            upgradeObj.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp2.ToString();
+        }
+    }
+
+    public void LevelUp3()
+    {
+        if (gameManager.soul >= 200)
+        {
+            playersObj = GameObject.FindGameObjectsWithTag("Player");
+
+            for (int i = 0; i < playersObj.Length; i++)
+            {
+                var id = playersObj[i].GetComponent<CharacterInfomation>().nID;
+
+                if (16 <= id && id < 23)
+                {
+                    playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                }
+            }
+
+            levelUp3 += 1;
+            powerUp3 += 20;
+            gameManager.UseGold(200);
+            upgradeObj.transform.GetChild(2).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp3.ToString();
+        }
+    }
+
+    public void LevelUp4()
+    {
+        if (gameManager.soul >= 300)
+        {
+            playersObj = GameObject.FindGameObjectsWithTag("Player");
+
+            for (int i = 0; i < playersObj.Length; i++)
+            {
+                var id = playersObj[i].GetComponent<CharacterInfomation>().nID;
+
+                if (23 <= id && id < 27)
+                {
+                    playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                }
+            }
+
+            levelUp4 += 1;
+            powerUp4 += 50;
+            gameManager.UseGold(300);
+            upgradeObj.transform.GetChild(3).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp4.ToString();
+        }
+    }
+
+    public void BuyCharacter()
+    {
+        if (gameManager.soul >= 200)
+        {
+            characterSpawnerScript.CreateCharacter();
+            gameManager.UseGold(200);
+            shopObj.SetActive(false);
+        }
     }
 
     public void ClickRating2()

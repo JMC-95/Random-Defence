@@ -31,8 +31,14 @@ public class MonsterSoul : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, mainCamera, out localPos);
         rectSoul.localPosition = localPos;
 
-        fTime += Time.deltaTime;
-
-        if (fTime > 0.5f) Destroy(gameObject);
+        if (gameObject.activeSelf)
+        {
+            fTime += Time.deltaTime;
+            if (fTime > 0.5f) Destroy(gameObject);
+        }
+        else
+        {
+            fTime = 0;
+        }
     }
 }

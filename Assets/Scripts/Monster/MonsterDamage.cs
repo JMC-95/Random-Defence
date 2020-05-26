@@ -30,19 +30,17 @@ public class MonsterDamage : MonoBehaviour
         skin = GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         //체력바의 위치 변경
         if (transform.localScale.x == -2)
         {
             var _hpBar = hpBar.GetComponent<MonsterHpBar>();
-
             _hpBar.offset = new Vector3(hpBarOffset.x, hpBarOffset.y, hpBarOffset.z);
         }
         else
         {
             var _hpBar = hpBar.GetComponent<MonsterHpBar>();
-
             _hpBar.offset = new Vector3(-hpBarOffset.x, hpBarOffset.y, hpBarOffset.z);
         }
 

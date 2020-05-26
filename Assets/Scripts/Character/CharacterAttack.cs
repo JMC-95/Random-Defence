@@ -48,18 +48,15 @@ public class CharacterAttack : MonoBehaviour
                 if (target != null && fTime > delay)
                 {
                     anim.SetBool("Attack", true);
+
+                    if (!target.activeInHierarchy)
+                    {
+                        collMonsters.Remove(target);
+                    }
                 }
                 else
                 {
                     anim.SetBool("Attack", false);
-                }
-
-                for (int i = 0; i < collMonsters.Count; ++i)
-                {
-                    if (!collMonsters[i].activeInHierarchy)
-                    {
-                        collMonsters.Remove(collMonsters[i]);
-                    }
                 }
             }
         }

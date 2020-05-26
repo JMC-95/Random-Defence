@@ -21,13 +21,49 @@ public class CharacterInfomation : MonoBehaviour
     {
         hero = DataManager.instance.heroData[nID];
 
-        sProperty = hero.sProperty;
-        nRating = hero.nRating;
-        sName = hero.sName;
-        nPower = hero.nPower;
-        fAspeed = hero.fAspeed;
-        nSkillPow = hero.nSkillPow;
-        sSkilldes = hero.sSkilldes;
-        nLevel = 1;
+        if (0 <= hero.nID && hero.nID < 8)
+        {
+            sProperty = hero.sProperty;
+            nRating = hero.nRating;
+            sName = hero.sName;
+            nPower = hero.nPower + UIManager.instance.powerUp1;
+            fAspeed = hero.fAspeed;
+            nSkillPow = hero.nSkillPow;
+            sSkilldes = hero.sSkilldes;
+            nLevel = 1 + UIManager.instance.levelUp1;
+        }
+        else if (8 <= hero.nID && hero.nID < 16)
+        {
+            sProperty = hero.sProperty;
+            nRating = hero.nRating;
+            sName = hero.sName;
+            nPower = hero.nPower + UIManager.instance.powerUp2;
+            fAspeed = hero.fAspeed;
+            nSkillPow = hero.nSkillPow;
+            sSkilldes = hero.sSkilldes;
+            nLevel = 1 + UIManager.instance.levelUp2;
+        }
+        else if (16 <= hero.nID && hero.nID < 23)
+        {
+            sProperty = hero.sProperty;
+            nRating = hero.nRating;
+            sName = hero.sName;
+            nPower = hero.nPower + UIManager.instance.powerUp3;
+            fAspeed = hero.fAspeed;
+            nSkillPow = hero.nSkillPow;
+            sSkilldes = hero.sSkilldes;
+            nLevel = 1 + UIManager.instance.levelUp3;
+        }
+        else
+        {
+            sProperty = hero.sProperty;
+            nRating = hero.nRating;
+            sName = hero.sName;
+            nPower = hero.nPower + UIManager.instance.powerUp4;
+            fAspeed = hero.fAspeed;
+            nSkillPow = hero.nSkillPow;
+            sSkilldes = hero.sSkilldes;
+            nLevel = 1 + UIManager.instance.levelUp4;
+        }
     }
 }
