@@ -10,7 +10,7 @@ namespace TMPro
     public class TMP_TextEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [Serializable]
-        public class CharacterSelectionEvent : UnityEvent<char, int> { }
+        public class SelectObjectionEvent : UnityEvent<char, int> { }
 
         [Serializable]
         public class SpriteSelectionEvent : UnityEvent<char, int> { }
@@ -28,13 +28,13 @@ namespace TMPro
         /// <summary>
         /// Event delegate triggered when pointer is over a character.
         /// </summary>
-        public CharacterSelectionEvent onCharacterSelection
+        public SelectObjectionEvent onSelectObjection
         {
-            get { return m_OnCharacterSelection; }
-            set { m_OnCharacterSelection = value; }
+            get { return m_OnSelectObjection; }
+            set { m_OnSelectObjection = value; }
         }
         [SerializeField]
-        private CharacterSelectionEvent m_OnCharacterSelection = new CharacterSelectionEvent();
+        private SelectObjectionEvent m_OnSelectObjection = new SelectObjectionEvent();
 
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace TMPro
 
                     // Send event to any event listeners depending on whether it is a character or sprite.
                     if (elementType == TMP_TextElementType.Character)
-                        SendOnCharacterSelection(m_TextComponent.textInfo.characterInfo[charIndex].character, charIndex);
+                        SendOnSelectObjection(m_TextComponent.textInfo.characterInfo[charIndex].character, charIndex);
                     else if (elementType == TMP_TextElementType.Sprite)
                         SendOnSpriteSelection(m_TextComponent.textInfo.characterInfo[charIndex].character, charIndex);
                 }
@@ -212,10 +212,10 @@ namespace TMPro
         }
 
 
-        private void SendOnCharacterSelection(char character, int characterIndex)
+        private void SendOnSelectObjection(char character, int characterIndex)
         {
-            if (onCharacterSelection != null)
-                onCharacterSelection.Invoke(character, characterIndex);
+            if (onSelectObjection != null)
+                onSelectObjection.Invoke(character, characterIndex);
         }
 
         private void SendOnSpriteSelection(char character, int characterIndex)

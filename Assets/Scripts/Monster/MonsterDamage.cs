@@ -96,7 +96,7 @@ public class MonsterDamage : MonoBehaviour
 
             isDie = true;
             monsterSpawnerScript.curMonster -= 1;
-            gameManager.UseGold(-GetComponent<MonsterMove>().Soul);
+            gameManager.UseSoul(-GetComponent<MonsterMove>().Soul);
             effectManager.SetToEffect(deathEffect, transform);
             gameObject.SetActive(false);
             Destroy(hpBar);

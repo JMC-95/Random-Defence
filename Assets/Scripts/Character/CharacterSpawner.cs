@@ -7,7 +7,7 @@ public class CharacterSpawner : MonoBehaviour
     private GameManager gameManager;
     private EffectManager effectManager;
 
-    private CharacterSelect characterSelect;
+    private SelectObject selectObject;
 
     [Header("Character Resources")]
     [SerializeField] public GameObject[] characterPrefabs;
@@ -34,7 +34,7 @@ public class CharacterSpawner : MonoBehaviour
         gameManager = GameManager.Get();
         effectManager = EffectManager.instance;
 
-        characterSelect = gameManager.GetComponent<CharacterSelect>();
+        selectObject = gameManager.GetComponent<SelectObject>();
 
         curCharacterCount = 0;
         maxCharacterCount = 50;

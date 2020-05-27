@@ -30,9 +30,6 @@ public class GameManager : MonoBehaviour
 
     public int soul;
 
-    public float pastTime = 0.0f;
-    public float bossDelay = 8.0f;
-
     public bool isWaveEnd = true;
     public bool isGameOver = false;
     public bool isGameVictory = false;
@@ -61,27 +58,27 @@ public class GameManager : MonoBehaviour
         var firstWave = new Dictionary<int, List<GenInfomation>>();
         //1 Wave - Monster
         var first = new List<GenInfomation>();
-        first.Add(new GenInfomation(Type.Monster.Goblin, 80, 3, 30, 20));
+        first.Add(new GenInfomation(Type.Monster.Goblin, 60, 3, 50, 30));
         firstWave.Add(1, first);
         //2 Wave - Monster
         var second = new List<GenInfomation>();
-        second.Add(new GenInfomation(Type.Monster.Golem, 100, 4, 10, 20));
+        second.Add(new GenInfomation(Type.Monster.Golem, 150, 3, 100, 30));
         firstWave.Add(2, second);
         //3 Wave - Monster
         var third = new List<GenInfomation>();
-        third.Add(new GenInfomation(Type.Monster.Kerberos, 100, 4, 10, 20));
+        third.Add(new GenInfomation(Type.Monster.Kerberos, 300, 3, 150, 30));
         firstWave.Add(3, third);
         //4 Wave - Monster
         var fourth = new List<GenInfomation>();
-        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 100, 4, 10, 20));
+        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 500, 3, 200, 30));
         firstWave.Add(4, fourth);
         //5 Wave - Monster
         var fifth = new List<GenInfomation>();
-        fifth.Add(new GenInfomation(Type.Monster.Troll, 100, 4, 10, 20));
+        fifth.Add(new GenInfomation(Type.Monster.Troll, 1000, 3, 300, 30));
         firstWave.Add(5, fifth);
         //6 Wave - Monster
         var sixth = new List<GenInfomation>();
-        sixth.Add(new GenInfomation(Type.Monster.Dragon, 100, 4, 10, 1));
+        sixth.Add(new GenInfomation(Type.Monster.Dragon, 10000, 3, 1000, 1));
         firstWave.Add(6, sixth);
         stage.Add(1, firstWave);
 
@@ -122,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        soul = 500;
+        soul = 200;
         curStage = 1;
         maxStage = 3;
         curWave = 0;
@@ -135,7 +132,7 @@ public class GameManager : MonoBehaviour
         monsterSpawnerScript = monsterSpawner.GetComponent<MonsterSpawner>();
     }
 
-    public void UseGold(int cost)
+    public void UseSoul(int cost)
     {
         soul -= cost;
     }
@@ -168,42 +165,23 @@ public class GameManager : MonoBehaviour
         {
             monsterSpawnerScript.portal.SetActive(true);
 
-            if (UIManager.instance.BossText.gameObject.activeInHierarchy)
-            {
-                pastTime += Time.deltaTime;
-                UIManager.instance.ShowBossEmergy();
-                if (pastTime > bossDelay) UIManager.instance.BossText.gameObject.SetActive(false);
-            }
-            else
-            {
-                pastTime = 0.0f;
-            }
-
             if (monsterSpawnerScript.genCount == monsterSpawnerScript.genCountLimit)
             {
                 isWaveEnd = true;
 
                 if (isWaveEnd) monsterSpawnerScript.portal.SetActive(false);
-
-                if (curWave == 6 && monsterSpawnerScript.curMonster == 0)
-                {
-                    curStage += 1;
-                    curWave = 0;
-                    pastTime = 0.0f;
-                    isGameVictory = true;
-                }
             }
         }
         else
         {
             if (!stageEnd)
             {
-                if (curWave == 6 && monsterSpawnerScript.curMonster != 0)
-                {
-                    return;
-                }
+                //if (curWave == 6 && monsterSpawnerScript.curMonster != 0)
+                //{
+                //    return;
+                //}
 
-                if (curWave == 2 && isSummon)
+                if (curWave == 6 && isSummon)
                 {
                     UIManager.instance.BossText.gameObject.SetActive(true);
                 }
@@ -215,6 +193,14 @@ public class GameManager : MonoBehaviour
                     monsterSpawnerScript.ResetGenInfo();
                     StartCoroutine(monsterSpawnerScript.CreateMonster());
                 }
+            }
+
+            if (curWave == maxWave && monsterSpawnerScript.genCount != 0 &&
+                monsterSpawnerScript.curMonster == 0)
+            {
+                curWave = 0;
+                curStage += 1;
+                isGameVictory = true;
             }
         }
     }

@@ -9,7 +9,7 @@ public class MonsterSpawner : MonoBehaviour
     public GameObject portal;
 
     [Header("Monster Create Info")]
-    private float createTime = 0.5f;    //몬스터 생성 시간
+    private float createTime = 0.3f;    //몬스터 생성 시간
 
     public int curMonster;
     public int maxMonster;

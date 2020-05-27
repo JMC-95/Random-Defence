@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 
     private GameManager gameManager;
 
-    private CharacterSelect characterSelectScript;
+    private SelectObject selectObjectScript;
     private CharacterSpawner characterSpawnerScript;
     private MonsterSpawner monsterSpawnerScript;
 
@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     public GameObject upgradeObj;
     public GameObject shopObj;
     public GameObject spawnerObj;
+    public GameObject gameClear;
+    public GameObject gameOver;
     GameObject[] playerObj;
     GameObject[] playersObj;
 
@@ -59,16 +61,18 @@ public class UIManager : MonoBehaviour
 
     private float changeAlpha = 0.01f;
     public float time;
+    public float pastTime = 0.0f;
+    public float bossDelay = 6.0f;
 
-    public bool isCombineTable;
-    private bool isCombineBase;
+    public bool isCombineTable = false;
+    private bool isCombineBase = false;
     //CombineButton
-    private bool isSameMat;
-    private bool isSameMat_1;
-    private bool isSameMat_2;
-    private bool isSameMat_3;
-    private bool isMaterial;
-    private bool isMaterial_1;
+    private bool isSameMat = false;
+    private bool isSameMat_1 = false;
+    private bool isSameMat_2 = false;
+    private bool isSameMat_3 = false;
+    private bool isMaterial = false;
+    private bool isMaterial_1 = false;
 
     Vector2 normalTab = new Vector2(45, 20);
     Vector2 selectTab = new Vector2(45, 25);
@@ -103,16 +107,18 @@ public class UIManager : MonoBehaviour
     {
         gameManager = GameManager.Get();
 
-        characterSelectScript = gameManager.GetComponent<CharacterSelect>();
+        selectObjectScript = gameManager.GetComponent<SelectObject>();
         characterSpawnerScript = GameObject.Find("CharacterSpawner").GetComponent<CharacterSpawner>();
         monsterSpawnerScript = GameObject.Find("MonsterSpawner").GetComponent<MonsterSpawner>();
 
+        gameClear.SetActive(false);
+        gameOver.SetActive(false);
         time = 45;
     }
 
     void UpdateUI()
     {
-        if (!gameManager.isGameOver)
+        if (!gameManager.isGameVictory || !gameManager.isGameOver)
         {
             int curSoul = gameManager.soul;
             int curWave = gameManager.curWave;
@@ -132,7 +138,7 @@ public class UIManager : MonoBehaviour
 
     void UpdateBtn()
     {
-        if (!gameManager.isGameOver)
+        if (!gameManager.isGameVictory || !gameManager.isGameOver)
         {
             if (gameManager.curWave < 6)
             {
@@ -145,7 +151,7 @@ public class UIManager : MonoBehaviour
 
     void UpdateTime()
     {
-        if (!gameManager.isGameOver)
+        if (!gameManager.isGameVictory || !gameManager.isGameOver)
         {
             time -= Time.deltaTime;
 
@@ -162,9 +168,33 @@ public class UIManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateUI();
-        UpdateBtn();
-        UpdateTime();
+        if (!gameManager.isGameVictory || !gameManager.isGameOver)
+        {
+            UpdateUI();
+            UpdateBtn();
+            UpdateTime();
+
+            if (BossText.gameObject.activeInHierarchy)
+            {
+                pastTime += Time.deltaTime;
+                ShowBossEmergy();
+                if (gameManager.isGameVictory || gameManager.isGameOver || pastTime > bossDelay)
+                    UIManager.instance.BossText.gameObject.SetActive(false);
+            }
+            else
+            {
+                pastTime = 0.0f;
+            }
+        }
+
+        if (gameManager.isGameVictory)
+        {
+            gameClear.SetActive(true);
+        }
+        else if (gameManager.isGameOver)
+        {
+            gameOver.SetActive(true);
+        }
     }
 
     public void ShowBossEmergy()
@@ -198,7 +228,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateInfo()
     {
-        var player = characterSelectScript.target.GetComponent<CharacterInfomation>();
+        var player = selectObjectScript.target.GetComponent<CharacterInfomation>();
         var playerRank = playerInfoObj.transform.GetChild(1);
 
         //현재 하이어라키에 존재하는 모든 플레이어 오브젝트를 배열에 담는다.
@@ -228,6 +258,7 @@ public class UIManager : MonoBehaviour
         //1성
         if (-1 < player.nID && player.nID < 8)
         {
+            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp1.ToString(); ;
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(false);
@@ -297,6 +328,7 @@ public class UIManager : MonoBehaviour
         //2성
         else if (7 < player.nID && player.nID < 16)
         {
+            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp2.ToString(); ;
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(true);
@@ -414,6 +446,7 @@ public class UIManager : MonoBehaviour
         //3성
         else if (15 < player.nID && player.nID < 23)
         {
+            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp3.ToString(); ;
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(true);
@@ -509,6 +542,7 @@ public class UIManager : MonoBehaviour
         //4성
         else
         {
+            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp4.ToString(); ;
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/4성");
 
             for (int i = 0; i < playerRank.childCount; i++)
@@ -539,49 +573,55 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void Sell()
+    {
+        var target = selectObjectScript.target;
+        var player = target.GetComponent<CharacterInfomation>();
+
+        UpdateInfoExit();
+
+        gameManager.UseSoul(-player.nSell);
+        characterSpawnerScript.curCharacterCount -= 1;
+        selectObjectScript.UnSelect();
+        target.gameObject.SetActive(false);
+    }
+
+    public void NonSelect()
+    {
+        UpdateInfoExit();
+        selectObjectScript.UnSelect();
+    }
+
     public void Combine1()
     {
         if (isMaterial)
         {
-            var target = characterSelectScript.target;
+            var target = selectObjectScript.target;
 
             CombineButton1();
             UpdateInfoExit();
 
             resultID = resIDList[0] - 1;
             characterSpawnerScript.curCharacterCount -= 1;
-            characterSelectScript.UnSelect();
+            selectObjectScript.UnSelect();
             target.gameObject.SetActive(false);
 
             spawnerObj.GetComponent<CharacterSpawner>().CombineCharacter_1();
         }
     }
 
-    public void Sell()
-    {
-        var target = characterSelectScript.target;
-        var player = target.GetComponent<CharacterInfomation>();
-
-        UpdateInfoExit();
-
-        gameManager.UseGold(-player.nSell);
-        characterSpawnerScript.curCharacterCount -= 1;
-        characterSelectScript.UnSelect();
-        target.gameObject.SetActive(false);
-    }
-
     public void Combine2()
     {
         if (isMaterial_1)
         {
-            var target = characterSelectScript.target;
+            var target = selectObjectScript.target;
 
             CombineButton2();
             UpdateInfoExit();
 
             resultID2 = resIDList[1] - 1;
             characterSpawnerScript.curCharacterCount -= 1;
-            characterSelectScript.UnSelect();
+            selectObjectScript.UnSelect();
             target.gameObject.SetActive(false);
 
             spawnerObj.GetComponent<CharacterSpawner>().CombineCharacter_2();
@@ -665,7 +705,7 @@ public class UIManager : MonoBehaviour
 
             levelUp1 += 1;
             powerUp1 += 5;
-            gameManager.UseGold(50);
+            gameManager.UseSoul(50);
             upgradeObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp1.ToString();
         }
     }
@@ -689,7 +729,7 @@ public class UIManager : MonoBehaviour
 
             levelUp2 += 1;
             powerUp2 += 10;
-            gameManager.UseGold(100);
+            gameManager.UseSoul(100);
             upgradeObj.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp2.ToString();
         }
     }
@@ -713,7 +753,7 @@ public class UIManager : MonoBehaviour
 
             levelUp3 += 1;
             powerUp3 += 20;
-            gameManager.UseGold(200);
+            gameManager.UseSoul(200);
             upgradeObj.transform.GetChild(2).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp3.ToString();
         }
     }
@@ -737,7 +777,7 @@ public class UIManager : MonoBehaviour
 
             levelUp4 += 1;
             powerUp4 += 50;
-            gameManager.UseGold(300);
+            gameManager.UseSoul(300);
             upgradeObj.transform.GetChild(3).GetChild(1).GetComponent<Text>().text = "Lv. " + levelUp4.ToString();
         }
     }
@@ -747,8 +787,17 @@ public class UIManager : MonoBehaviour
         if (gameManager.soul >= 200)
         {
             characterSpawnerScript.CreateCharacter();
-            gameManager.UseGold(200);
+            gameManager.UseSoul(200);
             shopObj.SetActive(false);
+        }
+    }
+
+    public void GachaSoul()
+    {
+        if (gameManager.soul >= 50)
+        {
+            int gacha = Random.Range(-100, 100);
+            gameManager.UseSoul(gacha);
         }
     }
 
@@ -898,7 +947,7 @@ public class UIManager : MonoBehaviour
 
     public void CombineButton1()
     {
-        var player = characterSelectScript.target.GetComponent<CharacterInfomation>();
+        var player = selectObjectScript.target.GetComponent<CharacterInfomation>();
 
         //1성
         if (-1 < player.nID && player.nID < 8)
@@ -970,7 +1019,7 @@ public class UIManager : MonoBehaviour
 
     public void CombineButton2()
     {
-        var player = characterSelectScript.target.GetComponent<CharacterInfomation>();
+        var player = selectObjectScript.target.GetComponent<CharacterInfomation>();
 
         //1성
         if (-1 < player.nID && player.nID < 8)

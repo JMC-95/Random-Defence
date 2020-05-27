@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CharacterSelect : MonoBehaviour
+public class SelectObject : MonoBehaviour
 {
     public GameObject UpgradeObj;
     public GameObject ShopObj;
@@ -35,8 +35,10 @@ public class CharacterSelect : MonoBehaviour
                     character = target.GetComponent<CharacterMove>();
 
                     UIManager.instance.UpdateInfo();
+                    UIManager.instance.ExitShop();
                     character.Select();
                     isSelect = true;
+                    isShop = false;
                 }
                 else if (hit.collider != null && hit.collider.tag == "Button" && !isShop)
                 {

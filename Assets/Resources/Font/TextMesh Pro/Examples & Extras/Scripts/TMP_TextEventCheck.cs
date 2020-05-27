@@ -12,7 +12,7 @@ namespace TMPro.Examples
         {
             if (TextEventHandler != null)
             {
-                TextEventHandler.onCharacterSelection.AddListener(OnCharacterSelection);
+                TextEventHandler.onSelectObjection.AddListener(OnSelectObjection);
                 TextEventHandler.onSpriteSelection.AddListener(OnSpriteSelection);
                 TextEventHandler.onWordSelection.AddListener(OnWordSelection);
                 TextEventHandler.onLineSelection.AddListener(OnLineSelection);
@@ -25,7 +25,7 @@ namespace TMPro.Examples
         {
             if (TextEventHandler != null)
             {
-                TextEventHandler.onCharacterSelection.RemoveListener(OnCharacterSelection);
+                TextEventHandler.onSelectObjection.RemoveListener(OnSelectObjection);
                 TextEventHandler.onSpriteSelection.RemoveListener(OnSpriteSelection);
                 TextEventHandler.onWordSelection.RemoveListener(OnWordSelection);
                 TextEventHandler.onLineSelection.RemoveListener(OnLineSelection);
@@ -34,7 +34,7 @@ namespace TMPro.Examples
         }
 
 
-        void OnCharacterSelection(char c, int index)
+        void OnSelectObjection(char c, int index)
         {
             Debug.Log("Character [" + c + "] at Index: " + index + " has been selected.");
         }
