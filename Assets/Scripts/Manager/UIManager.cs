@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
 
         gameClear.SetActive(false);
         gameOver.SetActive(false);
-        time = 45;
+        time = 60;
     }
 
     void UpdateUI()
@@ -142,7 +142,7 @@ public class UIManager : MonoBehaviour
         {
             if (gameManager.curWave < 6)
             {
-                if (time < 30) skip.gameObject.SetActive(true);
+                if (time < 45) skip.gameObject.SetActive(true);
                 else skip.gameObject.SetActive(false);
             }
             else skip.gameObject.SetActive(false);
@@ -159,7 +159,7 @@ public class UIManager : MonoBehaviour
             {
                 if (gameManager.stageEnd) gameManager.StartStage();
 
-                time = 45;
+                time = 60;
                 gameManager.StartWave();
                 characterSpawnerScript.CreateCharacter();
             }
@@ -221,7 +221,7 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.stageEnd) gameManager.StartStage();
 
-        time = 45;
+        time = 60;
         gameManager.StartWave();
         characterSpawnerScript.CreateCharacter();
     }
@@ -258,7 +258,21 @@ public class UIManager : MonoBehaviour
         //1성
         if (-1 < player.nID && player.nID < 8)
         {
-            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp1.ToString(); ;
+            if (powerUp1 > 0)
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(true);
+                playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp1.ToString();
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
+            else
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/1성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(false);
@@ -328,7 +342,21 @@ public class UIManager : MonoBehaviour
         //2성
         else if (7 < player.nID && player.nID < 16)
         {
-            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp2.ToString(); ;
+            if (powerUp2 > 0)
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(true);
+                playerInfoObj.transform.GetChild(8).GetComponent<Text>().text = "+ : " + powerUp2.ToString();
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
+            else
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/2성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(true);
@@ -446,7 +474,21 @@ public class UIManager : MonoBehaviour
         //3성
         else if (15 < player.nID && player.nID < 23)
         {
-            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp3.ToString(); ;
+            if (powerUp3 > 0)
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(true);
+                playerInfoObj.transform.GetChild(9).GetComponent<Text>().text = "+ : " + powerUp3.ToString();
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
+            else
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/3성");
             playerRank.GetChild(0).gameObject.SetActive(true);
             playerRank.GetChild(1).gameObject.SetActive(true);
@@ -540,9 +582,23 @@ public class UIManager : MonoBehaviour
             }
         }
         //4성
-        else
+        else if (23 < player.nID && player.nID < 27)
         {
-            if (powerUp1 > 0) playerInfoObj.transform.GetChild(7).GetComponent<Text>().text = "+ : " + powerUp4.ToString(); ;
+            if (powerUp4 > 0)
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(true);
+                playerInfoObj.transform.GetChild(10).GetComponent<Text>().text = "+ : " + powerUp4.ToString();
+            }
+            else
+            {
+                playerInfoObj.transform.GetChild(7).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(8).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(9).gameObject.SetActive(false);
+                playerInfoObj.transform.GetChild(10).gameObject.SetActive(false);
+            }
             playerInfoObj.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/4성");
 
             for (int i = 0; i < playerRank.childCount; i++)
@@ -699,7 +755,7 @@ public class UIManager : MonoBehaviour
                 if (0 <= id && id < 8)
                 {
                     playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
-                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 5;
                 }
             }
 
@@ -747,7 +803,7 @@ public class UIManager : MonoBehaviour
                 if (16 <= id && id < 23)
                 {
                     playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
-                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 20;
                 }
             }
 
@@ -771,7 +827,7 @@ public class UIManager : MonoBehaviour
                 if (23 <= id && id < 27)
                 {
                     playersObj[i].GetComponent<CharacterInfomation>().nLevel += 1;
-                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 10;
+                    playersObj[i].GetComponent<CharacterInfomation>().nPower += 50;
                 }
             }
 

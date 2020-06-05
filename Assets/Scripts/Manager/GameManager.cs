@@ -58,27 +58,27 @@ public class GameManager : MonoBehaviour
         var firstWave = new Dictionary<int, List<GenInfomation>>();
         //1 Wave - Monster
         var first = new List<GenInfomation>();
-        first.Add(new GenInfomation(Type.Monster.Goblin, 60, 3, 50, 30));
+        first.Add(new GenInfomation(Type.Monster.Goblin, 60, 3, 20, 30));
         firstWave.Add(1, first);
         //2 Wave - Monster
         var second = new List<GenInfomation>();
-        second.Add(new GenInfomation(Type.Monster.Golem, 150, 3, 100, 30));
+        second.Add(new GenInfomation(Type.Monster.Golem, 150, 3, 50, 30));
         firstWave.Add(2, second);
         //3 Wave - Monster
         var third = new List<GenInfomation>();
-        third.Add(new GenInfomation(Type.Monster.Kerberos, 300, 3, 150, 30));
+        third.Add(new GenInfomation(Type.Monster.Kerberos, 300, 3, 100, 30));
         firstWave.Add(3, third);
         //4 Wave - Monster
         var fourth = new List<GenInfomation>();
-        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 500, 3, 200, 30));
+        fourth.Add(new GenInfomation(Type.Monster.Minotauros, 500, 3, 150, 30));
         firstWave.Add(4, fourth);
         //5 Wave - Monster
         var fifth = new List<GenInfomation>();
-        fifth.Add(new GenInfomation(Type.Monster.Troll, 1000, 3, 300, 30));
+        fifth.Add(new GenInfomation(Type.Monster.Troll, 1000, 3, 200, 30));
         firstWave.Add(5, fifth);
         //6 Wave - Monster
         var sixth = new List<GenInfomation>();
-        sixth.Add(new GenInfomation(Type.Monster.Dragon, 10000, 3, 1000, 1));
+        sixth.Add(new GenInfomation(Type.Monster.Dragon, 10000, 3, 500, 1));
         firstWave.Add(6, sixth);
         stage.Add(1, firstWave);
 
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        soul = 200;
+        soul = 5000;
         curStage = 1;
         maxStage = 3;
         curWave = 0;

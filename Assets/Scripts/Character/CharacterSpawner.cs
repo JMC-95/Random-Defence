@@ -107,6 +107,7 @@ public class CharacterSpawner : MonoBehaviour
 
         unitObj.transform.position = randomPos[ranPos];
         unitObj.SetActive(true);
+        unitObj.GetComponent<Animator>().SetBool("Attack", false);
         effectTransform.Add(unitObj.transform);
     }
 
